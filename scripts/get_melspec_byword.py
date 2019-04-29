@@ -4,7 +4,7 @@
 '''
 # calculate spectral-envelope variability
 # via mel freq spectral coefficients
-# à la Lee, Potamianos, & Narayanan (1999)
+# à la Gerosa, Lee, Giuliani, & Narayanan (2006)
 # walk directory of wav files and corresponding textgrids, option to specify single wav file 
 # file output = filename.mean_spectrum.csv
 # Authors: Meg Cychosz & Keith Johnson 2018, 
