@@ -1,0 +1,164 @@
+---
+title: "coartic_asdur_CV_syllables"
+author: "Meg Cychosz"
+date: "5/3/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library('purrr')
+library('dplyr')
+library('ggplot2')
+```
+
+```{r}
+data <- read.csv ('trans_dur_sbq_all_cs.csv')
+```
+
+```{r, remove ejectives}
+data <- subset(data, Phone != 't\'')
+data <- subset(data, Phone != 'k\'') 
+data$Phone <- droplevels(data$Phone)
+```
+
+```{r, create CV_df}
+
+CV_df <- data[ which(data$Word=='chaki-pi' | data$Word=='katari-pi' | 
+                            data$Word=='llama-pi' | data$Word=='maki-pi' |
+                            data$Word=='papa-pi' | data$Word=='qhari-pi' |
+                            data$Word=='sunkha-pi' | data$Word=='t\'ika-pi' | 
+                            data$Word=='waka-pi' | data$Word=='wallpa-pi' |
+                            data$Word=='warmi-pi' | data$Word=='wasi-pi' | 
+                            data$Word=='wawa-pi'), ]
+```
+
+```{r, get relevant segments, echo=FALSE}
+chaki <- CV_df[ which(CV_df$Word=='chaki-pi' & CV_df$Phone == 'ch'), ]
+maki <- CV_df[ which(CV_df$Word=='maki-pi' & CV_df$Phone == 'm'), ]
+qhari <- CV_df[ which(CV_df$Word=='qhari-pi' & CV_df$Phone == 'qh'), ]
+sunkha <- CV_df[ which(CV_df$Word=='sunkha-pi' & CV_df$Phone == 'kh'), ]
+tika <- CV_df[ which(CV_df$Word=='t\'ika-pi' & CV_df$Phone == 'k'), ]
+warmi <- CV_df[ which(CV_df$Word=='warmi-pi' & CV_df$Phone == 'w'), ]
+wasi <- CV_df[ which(CV_df$Word=='wasi-pi' & CV_df$Phone == 'w'), ]
+wallpa <- CV_df[ which(CV_df$Word=='wallpa-pi' & (CV_df$Phone=='p' & CV_df$Previous=='ll')), ] # get stressed
+llama <- CV_df[ which(CV_df$Word=='llama-pi' & CV_df$Phone=='m'), ] 
+katari_t <- CV_df[ which(CV_df$Word=='katari-pi' & CV_df$Phone=='t'), ]
+katari_k <- CV_df[ which(CV_df$Word=='katari-pi' & CV_df$Phone=='k'), ]
+waka_k <- CV_df[ which(CV_df$Word=='waka-pi' & CV_df$Phone=='k'), ] 
+waka_w <- CV_df[ which(CV_df$Word=='waka-pi' & CV_df$Phone=='w'), ]
+wawa <- CV_df[ which(CV_df$Word=='wawa-pi' & (CV_df$Phone=='w' & CV_df$Previous == 'a')), ]
+
+papa <- CV_df[ which(CV_df$Morph_status=='morph' & CV_df$Phone=='p'), ] # get the stressed syllable
+```
+
+```{r, get final df}
+new_CVdf <- Reduce(function(x,y) merge(x,y,all=TRUE) ,list(chaki,
+                  katari_t, katari_k, llama, maki, qhari, sunkha, tika, 
+                  warmi, wasi, papa, waka_k, waka_w, wawa, wallpa)) 
+```
+
+```{r, calculate CV syllable duration, message=FALSE}
+new_CVdf <- new_CVdf %>% 
+  group_by(Word, Speaker, Translation) %>% 
+  mutate(CV_duration = map2(Phone_duration, lead(Phone_duration), `+`)) %>% 
+  as.data.frame()  
+new_CVdf$CV_duration <- as.numeric(new_CVdf$CV_duration)
+
+
+df.final <- new_CVdf
+```
+
+```{r, make some variables, echo=FALSE, message=FALSE, warning=FALSE}
+library('plyr')
+df.final$Age_group <- mapvalues(df.final$Speaker, from = 
+            c('Alfredo', 'Andrea', 'Brian', 'Cristian', 'Cristina', 'Cynthia', 'Daisy',
+              'Daniela', "David", "Diego", "Dismal", "Edgar", "Eduard", "Elias", "Elsa",
+              "Eusevia", "Evan", "Fabiola", "Gladys", "Ivan", "Johan", "Josefina",
+              "Joselin", "Juana", "Justina", "Laura", "Leonilda", "Liber", "Lucia",
+              "LuisMario", "Margarita", "Mari", "Martha", "Nayeli", "Rosemary", "Senovia",
+              "Sulma", "Sulmaadult", "Vanesa", "Vladimir"), 
+            to = c("9", "adult", "8", "7", "9", "6", "7", 
+                   "8", "6", "8", "10", "9", "7", "7", "adult", 
+                   "adult", "8", "7", "adult", "6", "5", "adult",
+                   "10", "adult", "7", "adult", "7", "7", "6",
+                   "8", "10", "8", "adult", "9", "9", "adult",
+                   "10", "adult", "10", "7"))
+
+df.final$Age <- mapvalues(df.final$Age_group, from = 
+                            c('adult', '9', '8', '7', '6', '5', '10'), 
+                          to = c("adult", "child", "child", "child", "child", 
+                                 "child", "child"))
+
+adult <- subset(df.final, Age =='adult')
+child <- subset(df.final, Age =='child')
+ten <- subset(df.final, Age_group =='10')
+nine <- subset(df.final, Age_group =='9')
+et <- subset(df.final, Age_group =='8')
+svn <- subset(df.final, Age_group =='7')
+six <- subset(df.final, Age_group =='6')
+fv <- subset(df.final, Age_group == '5')
+```
+
+# Some descriptive stats
+```{r}
+
+print(paste("Average transition duration between [C] and [V]: adults",mean(adult$transition_duration)%>% round(5)))
+print(paste("Average transition duration: children",mean(child$transition_duration)%>% round(5)))
+print(paste("Average transition duration: ten y/os",mean(ten$transition_duration) %>% round(5)))
+print(paste("Average transition duration: nine y/os",mean(nine$transition_duration)%>% round(5)))
+print(paste("Average transition duration: eight y/os",mean(et$transition_duration)%>% round(5)))
+print(paste("Average transition duration: seven y/os",mean(svn$transition_duration)%>% round(5)))
+print(paste("Average transition duration: 5 & 6 y/os",mean(six$transition_duration)%>% round(5)))
+
+```
+
+### Create some syllables for plotting
+```{r}
+df.final$plot_Phone <- mapvalues(df.final$Word, from = c("chaki-pi", "katari-pi", 
+                                                        "llama-pi", "maki-pi", "papa-pi", 
+                                                        "qhari-pi", "sunkha-pi", "t\'ika-pi", "waka-pi", 
+                                                        "wasi-pi", "warmi-pi", 
+                                                        "wawa-pi", "wallpa-pi"), 
+                                to = c("[cha]", "[ta]", "[ma]", "[ma]",
+                                       "[pa]", "[qha]", "[kha]", "[ka]",
+                                       "[ka]", "[wa]",  "[wa]", "[wa]",  "[pa]"))
+```
+
+# Visualize C-V transition duration by consonant manner 
+```{r, warning=FALSE}
+# relevel by sonority
+df.final$plot_Phone <- factor(df.final$plot_Phone, 
+                             levels=c("[kha]","[ka]", "[ta]", "[pa]",  
+                                      "[qha]", "[cha]", 
+                                      "[wa]", "[ma]"))
+ggplot(df.final, aes(x=plot_Phone, y=transition_duration*1000)) + 
+  geom_boxplot() +
+  geom_jitter(aes(color = plot_Phone), width=0.25, size=0.75) +
+  scale_color_manual(values = c("darkred", "tomato4","tomato2", "tomato", "orange3", "orange", 
+                                "goldenrod1", "lightgoldenrod")) +
+  scale_y_continuous(limits=c(0,60)) + 
+labs(title= ".CV transition duration by \n syllable coarticulatory resistance", 
+                 y="Transition duration (ms)", x = "Syllable") + 
+  theme(legend.position="none") +
+  theme(axis.title=element_text(size=16)) + 
+  theme(plot.title = element_text(size = 18, face = "bold")) +
+  theme(axis.text.x = element_text(face="bold", size=12),
+        axis.text.y = element_text(face ='bold', size=12))
+```
+
+# Analysis by age
+```{r, warning=FALSE}
+word_plot <- ggplot(df.final, aes(x=Age, y=transition_duration*1000, fill=plot_Phone)) + 
+  geom_boxplot() + guides(fill=guide_legend(title="Morpheme"))
+word_plot + labs(title= ".C-V Transition duration by syllable and age", 
+                 y="Transition Duration (ms)", x = "Age") + 
+    scale_y_continuous(limits=c(0,60)) + 
+  theme(axis.title=element_text(size=16)) + 
+  theme(plot.title = element_text(size = 18, face = "bold")) +
+  theme(axis.text.x = element_text(face="bold", size=12),
+        axis.text.y = element_text(face ='bold', size=12))
+
+
+```
+
