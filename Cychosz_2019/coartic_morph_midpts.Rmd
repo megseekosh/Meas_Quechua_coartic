@@ -1,0 +1,386 @@
+---
+title: "coartic_midpts"
+author: "Meg Cychosz"
+date: "3/30/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library('tidyverse')
+library('dplyr')
+library('ggplot2')
+library('lme4')
+library('lmerTest')
+```
+
+An analysis of coarticulation across versus within morphemes in adult and child Quechua. Here we are analyzing adjacent coarticulation between [a] and [p] across morphemes as in "llama-pi" and within morphemes as in "api". 
+
+# Load data
+```{r import code, warning=FALSE, message=FALSE}
+data <- read.csv('all_files_mfccs_3tpt.csv', na.strings = c("NA","NaN", " "))
+```
+
+```{r pre-cleaning, echo=FALSE}
+data <- data %>%
+  filter(Note!='DON\'T USE')
+data$Note <- droplevels(data$Note)
+
+data <- data %>%
+  filter(Phone!='t\'')
+data <- data %>%
+  filter(Phone!='k\'')
+data$Phone <- droplevels(data$Phone)
+```
+
+# Prepare and process data
+```{r create df, echo=FALSE}
+morph_df <- data[ which(data$Word=='api-pi' | data$Word=='imilla-pi' | 
+                       data$Word=='juk\'ucha-pi' | data$Word=='llama-pi' |
+                       data$Word=='papa-pi' | data$Word=='sunkha-pi' |
+                       data$Word=='t\'ika-pi' | data$Word=='uhut\'a-pi' |
+                       data$Word=='waka-pi' | data$Word=='wallpa-pi' | 
+                       data$Word=='wawa-pi' |  data$Word == 'api' |
+                         data$Word == 'papa'), ]
+
+imilla <- morph_df[ which(morph_df$Word=='imilla-pi' & (morph_df$Phone=='a' | morph_df$Phone == 'p')), ]
+jukucha <- morph_df[ which(morph_df$Word=='juk\'ucha-pi' & (morph_df$Phone=='a' | morph_df$Phone == 'p')), ]
+llama <- morph_df[ which((morph_df$Word=='llama-pi' & (morph_df$Phone=='a' & morph_df$Previous == 'm')) |
+                        ((morph_df$Word=='llama-pi' & morph_df$Phone == 'p'))), ]
+sunkha <- morph_df[ which(morph_df$Word=='sunkha-pi' & (morph_df$Phone=='a' | morph_df$Phone == 'p')), ]
+tika <- morph_df[ which(morph_df$Word=='t\'ika-pi' & (morph_df$Phone=='a' | morph_df$Phone == 'p')), ]
+uhuta <- morph_df[ which(morph_df$Word=='uhut\'a-pi' & (morph_df$Phone=='a' | morph_df$Phone == 'p')), ]
+wawa <- morph_df[ which((morph_df$Word=='wawa-pi' & (morph_df$Phone=='a' & morph_df$Following == 'p')) |
+                           ((morph_df$Word=='wawa-pi' & morph_df$Phone == 'p'))), ]
+waka <- morph_df[ which((morph_df$Word=='waka-pi' & (morph_df$Phone=='a' & morph_df$Following == 'p')) |
+                          ((morph_df$Word=='waka-pi' & morph_df$Phone == 'p'))), ]
+wallpa <- morph_df[ which((morph_df$Word=='wallpa-pi' & (morph_df$Phone=='a' & morph_df$Previous == 'p')) |
+                      ((morph_df$Word=='wallpa-pi' & morph_df$Following=='i'))), ]
+
+# get 'papa'
+a <-
+  morph_df[which(morph_df$Morph_status == 'root' &
+                   morph_df$Phone == 'a'),]
+# get the first 'a' that matches this criteria bc we're looking morpheme-internal:
+a.new <-
+  a[seq(1, nrow(a), 2),] # index every second row, starting at row 1, to get 1st 'a' meas
+p <-
+  morph_df[which(morph_df$Morph_status == 'root' &
+                   (morph_df$Word == 'papa-pi')),]
+p.new <- p[which(p$Previous == 'a'),]
+
+# get 'ap from papa
+ap <- morph_df[which(morph_df$Morph_status == 'morph'),]
+papa2 <- rbind(a.new, p.new, ap)
+
+# get api
+api <-
+  morph_df[which(morph_df$Word == 'api' &
+                   (morph_df$Phone == 'a' | morph_df$Previous == 'a')),]
+api_pi <-
+  morph_df[which(morph_df$Word == 'api-pi' &
+                   (morph_df$Phone == 'a' | morph_df$Previous == 'a')),]
+api2 <- rbind(api,api_pi)
+```
+
+```{r, concatenate word_df}
+new_morphDF <- Reduce(function(x,y) merge(x,y,all=TRUE) ,list(api2, imilla,
+            jukucha, llama, papa2, sunkha, tika, uhuta, waka, wallpa, wawa)) 
+new_morphDF$Word <- droplevels(new_morphDF$Word)
+```
+
+\newpage
+# Convert structure of spectral measurements
+```{r pre-process, echo=TRUE}
+new_morphDF$Spectrum_int_2 <- gsub( ']', '', new_morphDF$Spectrum_int_2)
+new_morphDF$Spectrum_int_2 <- gsub( '[ ', '', new_morphDF$Spectrum_int_2, fixed = TRUE)
+
+# make string, then numeric
+new_morphDF$variable_sep_tp2 <- str_extract_all(new_morphDF$Spectrum_int_2, "[-0-9\\.]+")
+new_morphDF$spec_vector_tp2 <- lapply(new_morphDF$variable_sep_tp2 , FUN = as.numeric)
+new_morphDF <- as.data.frame(new_morphDF)
+```
+
+# Calculate euc distance between vectors
+```{r plyr_check}
+# sanity check
+if(any(grepl("package:plyr", search()))) detach("package:plyr") else message("plyr not loaded")
+```
+
+```{r calculations on spec vectors}
+# euclidean distance and raw difference
+diff_morphdf <- new_morphDF %>% 
+  group_by(Word, Speaker, Note) %>% 
+  mutate(raw_diff = map2(spec_vector_tp2, lead(spec_vector_tp2), `-`)) %>%  # sanity check
+  mutate(euc_dist = map2(spec_vector_tp2, lead(spec_vector_tp2), function(x, y) 
+    sqrt(sum((x-y) ^ 2)))) %>% 
+  as.data.frame()  
+
+# sequence duration
+diff_morphdf <- diff_morphdf %>% 
+  group_by(Word, Speaker, Note) %>% 
+  mutate(ap_duration = map2(Phone_duration, lead(Phone_duration), `+`)) %>% 
+  as.data.frame()  
+
+# remove NA rows where measurement was made upon but not stored
+df.final <- subset(diff_morphdf, euc_dist != 'NA')
+df.final$euc_dist <- as.numeric(df.final$euc_dist)
+df.final$ap_duration <- as.numeric(df.final$ap_duration)
+```
+
+\newpage
+# Descriptive stats
+```{r rename variables, echo=FALSE, warning=FALSE, message=FALSE}
+library('plyr')
+df.final$Age_group <- mapvalues(df.final$Speaker, from = 
+            c('Alfredo', 'Andrea', 'Brian', 'Cristian', 'Cristina', 'Cynthia', 'Daisy',
+              'Daniela', "David", "Diego", "Dismal", "Edgar", "Eduard", "Elias", "Elsa",
+              "Eusevia", "Evan", "Fabiola", "Gladys", "Ivan", "Johan", "Josefina",
+              "Joselin", "Juana", "Justina", "Laura", "Leonilda", "Liber", "Lucia",
+              "LuisMario", "Margarita", "Mari", "Martha", "Nayeli", "Rosemary", "Senovia",
+              "Sulma", "Sulmaadult", "Vanesa", "Vladimir"), 
+            to = c("9", "adult", "8", "7", "9", "5-6", "7", 
+                   "8", "5-6", "8", "10", "9", "7", "7", "adult", 
+                   "adult", "8", "7", "adult", "5-6", "5-6", "adult",
+                   "10", "adult", "7", "adult", "7", "7", "5-6",
+                   "8", "10", "8", "adult", "9", "9", "adult",
+                   "10", "adult", "10", "7"))
+
+df.final$Age <- mapvalues(df.final$Age_group, from = 
+                            c('adult', '9', '8', '7', '5-6', '10'), 
+                          to = c("adult", "child", "child", "child", 
+                                 "child", "child"))
+
+df.final$Morph_status <- mapvalues(df.final$Word, from = 
+c('api-pi', 'imilla-pi', 'juk\'ucha-pi', 'llama-pi', 'papa-pi', 'uhut\'a-pi', 
+'t\'ika-pi', 'wallpa-pi', 'waka-pi', 'wawa-pi', 'sunkha-pi', 'api', 'papa'), 
+to = c("within morpheme", "across morpheme", "across morpheme", "across morpheme", 
+"within morpheme", "across morpheme", "across morpheme", "across morpheme", "across morpheme", "across morpheme", "across morpheme", "within morpheme", "within morpheme"))
+detach(package:plyr)
+
+adult <- subset(df.final, Age =='adult')
+child <- subset(df.final, Age =='child')
+ten <- subset(df.final, Age_group =='10')
+nine <- subset(df.final, Age_group =='9')
+et <- subset(df.final, Age_group =='8')
+svn <- subset(df.final, Age_group =='7')
+six <- subset(df.final, Age_group =='5-6')
+```
+
+### averages by age
+```{r echo=FALSE}
+print(paste("Average euc. distance between spectral vectors, all environments: adults",mean(adult$euc_dist)%>% round(2)))
+print(paste("Average euc. distance, all environments: children",mean(child$euc_dist)%>% round(2)))
+print(paste("Average euc. distance, all environments: ten y/os",mean(ten$euc_dist) %>% round(2)))
+print(paste("Average euc. distance, all environments: nine y/os",mean(nine$euc_dist)%>% round(2)))
+print(paste("Average euc. distance, all environments: eight y/os",mean(et$euc_dist)%>% round(2)))
+print(paste("Average euc. distance, all environments: seven y/os",mean(svn$euc_dist)%>% round(2)))
+print(paste("Average euc. distance, all environments: 5 & 6 y/os",mean(six$euc_dist)%>% round(2)))
+```
+
+### age*morphological status
+```{r, echo=FALSE}
+a.suffix <- subset(df.final, Morph_status == 'across morpheme' & Age == 'adult')
+a.root <- subset(df.final, Morph_status == 'within morpheme' & Age == 'adult')
+c.suffix <- subset(df.final, Morph_status == 'across morpheme' & Age == 'child')
+c.root <- subset(df.final, Morph_status == 'within morpheme' & Age == 'child')
+```
+
+```{r, echo=FALSE}
+print(paste("Average euc. distance across morphemes: adults",mean(a.suffix$euc_dist)%>% round(2)))
+print(paste("Average euc. distance within morphemes: adults",mean(a.root$euc_dist)%>% round(2)))
+print(paste("Average euc. distance across morphemes: children",mean(c.suffix$euc_dist)%>% round(2)))
+print(paste("Average euc. distance within morphemes: children",mean(c.root$euc_dist)%>% round(2)))
+```
+
+\newpage
+# visualize some stuff
+```{r chil-adult visual, echo=TRUE, warning=FALSE}
+jpeg('age_eucdist.jpeg', width = 500, height=500)
+
+ggplot(df.final, aes(Age, euc_dist, fill = Morph_status)) +
+  geom_boxplot() + guides(fill = guide_legend(title = "Position")) +
+  ylim(4, 30) +
+  scale_fill_manual(values=c("gray39", "gray77")) + 
+  labs(title = "Spectral distance between \n middle thirds of [a] & [p]",
+            y = "Euclidean distance", x = "Age") +
+  theme(legend.position = c(0.6, 0.88)) +
+  theme(legend.title=element_text(size=12,face="bold")) +
+  theme(legend.text=element_text(size=12)) +
+  theme(plot.title = element_text(size = 18, face = "bold")) +
+  theme(
+    axis.text = element_text(face = "bold", size = 22),
+    axis.title = element_text(size=22,face="bold"))
+
+dev.off()
+```
+
+\newpage
+### make new age groups
+```{r by age group, warning=FALSE}
+library('plyr')
+df.final$Age_group <- mapvalues(df.final$Age_group, from = 
+                            c('adult', '9', '10', '8', '7', '5-6'), 
+                          to = c("adult", "9-10", "9-10", "7-8", 
+                                 "7-8", "5-6"))
+
+df.final$Age_group <- factor(df.final$Age_group,
+                             levels = c("5-6", "7-8", "9-10", "adult"))
+
+jpeg('agegroup_eucdist.jpeg', width = 500, height=500)
+
+ggplot(df.final, aes(x = Age_group, y = euc_dist, fill = Morph_status)) +
+  geom_boxplot() + guides(fill = guide_legend(title = "Position")) + 
+  scale_fill_manual(values=c("gray39", "gray77")) + 
+  ylim(4, 30) +
+  labs(title = "Spectral distance between \n middle thirds of [a] & [p]",
+            y = "Euclidean distance", x = "Age (in years)") +
+  theme(legend.position = c(0.69, 0.88)) +
+  theme(legend.title=element_text(size=12,face="bold")) +
+  theme(legend.text=element_text(size=12)) +
+  theme(plot.title = element_text(size = 18, face = "bold")) +
+  theme(
+    axis.text = element_text(face = "bold", size = 22),
+    axis.title = element_text(size=22,face="bold"))
+
+dev.off()
+```
+
+\newpage
+# visualize distance by word
+```{r, warning=FALSE}
+adult <- subset(df.final, Age == 'adult')
+child <- subset(df.final, Age == 'child')
+
+ggplot(child, aes(x = Word, y = euc_dist, fill = Morph_status)) +
+  geom_boxplot() +
+  guides(fill = guide_legend(title = "Word")) +
+  ylim(4,30) +
+  labs(title = "Spectral distance between \n middle third of [a] & [p] by word in children",
+            y = "Euclidean distance", x = "Age") +
+  theme(axis.title = element_text(size = 16)) +
+  theme(plot.title = element_text(size = 18, face = "bold")) +
+  theme(
+    axis.text.x = element_text(face = "bold", size = 6),
+    axis.text.y = element_text(face = 'bold', size = 12)
+  )
+
+ggplot(adult, aes(x = Word, y = euc_dist, fill = Morph_status)) +
+  geom_boxplot() + guides(fill = guide_legend(title = "Word")) +
+  ylim(4,30) +
+  labs(title = "Spectral distance between \n middle third of [a] & [p] by word in adults",
+            y = "Euclidean distance", x = "Age") +
+  theme(axis.title = element_text(size = 16)) +
+  theme(plot.title = element_text(size = 18, face = "bold")) +
+  theme(
+    axis.text.x = element_text(face = "bold", size = 6),
+    axis.text.y = element_text(face = 'bold', size = 12)
+  )
+```
+
+
+\newpage
+# Fit some models
+
+### baseline and baseline + ap_duration
+Less coarticulation in temporally longer segments, as expected. 
+```{r, message=FALSE}
+summary(m <- lmer(euc_dist ~ + (1 | Speaker) + (1 | Word), data = df.final)) 
+summary(mdur <- lmer(euc_dist ~ ap_duration + (1 | Speaker) + (1 | Word), data = df.final)) 
+anova(m, mdur) # improves
+```
+
+### Morphological position + sequence_duration
+```{r, message=FALSE}
+summary(m1.a <- lmer(euc_dist ~ Morph_status + ap_duration + (1 | Speaker) + (1 | Word), data = df.final)) 
+anova(mdur, m1.a) # doesn't improve 
+```
+
+\newpage
+### Age[child v adult] + sequence_duration + Morph_status
+```{r, message=FALSE}
+summary(m1 <- lmer(euc_dist ~ Age + ap_duration + Morph_status + (1 | Speaker) + (1 | Word), data = df.final)) 
+anova(mdur, m1) # doesn't improve
+```
+
+\newpage
+### Age*Morphological status + sequence duration    
+
+The interaction of age and morphological status improves model fit. Adults differentiate between morphological environments, but children do not. Specifically, adults coarticulate less within morphemes than across. 
+```{r, message=FALSE}
+summary(m2 <- lmer(euc_dist ~ Age*Morph_status + ap_duration + (1 | Speaker) + (1 | Word), data = df.final)) 
+anova(mdur, m2) # improves
+```
+
+
+
+### Morphological status*sequence_duration
+
+No reliable interaction of morphological status and sequence duration. 
+```{r, message=FALSE}
+summary(m4 <- lmer(euc_dist ~ Morph_status*ap_duration + (1 | Speaker) + (1 | Word), data = df.final)) 
+anova(mdur, m4) # doesn't improve
+
+```
+
+
+
+# There is no relationship between segment duration and morphological environment - just less coarticulation in longer segments in all environments.
+```{r duration*morph visual, warning=FALSE}
+ggplot(df.final, aes(ap_duration*1000, euc_dist, color=Morph_status, fill=Morph_status)) +
+ geom_point(size=.5) +
+ geom_smooth(method = "lm") +
+ labs(x = "[a-p] sequence duration (ms)", y = "Euclidean distance") +
+ ggtitle("Coarticulation by [a-p] sequence duration \n and morphological environment") +
+ ylim(4, 30)
+```
+
+\newpage
+# Duration by morphological status by age
+
+This model shows that there is a three-part interaction between morphological position, segment duration, and age. 
+```{r, message=FALSE}
+summary(m5 <- lmer(euc_dist ~ Morph_status*ap_duration*Age + (1 | Speaker) + (1 | Word), data = df.final)) 
+anova(mdur, m5) # improves
+```
+
+\newpage
+# What does this three part interaction look like?
+Once again, adults distinguish between the two environments and children do not. Specifically, adults coarticulate less in longer duration segments across a morpheme boundary. But adults don't really change their coarticulatory behavior by segment duration within a morpheme. This could be some sort of planning effect.   
+You plan morphologically-complex words online, right? So you see a "hyper" planning effect in words of longer duration.   
+The words are longer maybe because they took longer to plan. They took longer to plan because the inflection of the word+suffix is less frequent/less used/less familiar. The inflection is less familiar and so speakers coarticulate less between the word and the suffix. It actually kind of makes sense that there isn't a relationship between in the kids - they don't have the experience.  
+I think in an ideal world, I would have frequency statistics for these inflections. But I don't and I have yet to hear a good suggestion for how to get them (adult ratings? - don't reflect children's experience. lexical statistics from the bible? - biased and unnatural language). Maybe one day once the child-directed speech in the Quechua corpus is annotated. 
+```{r, warning=FALSE}
+#jpeg("interaction.jpg", width = 500, height = 500)
+
+ggplot(df.final, aes(ap_duration*1000, euc_dist, color=Morph_status, fill=Morph_status)) +
+ geom_point(size=.5) +
+ geom_smooth(method = "lm") +
+ labs(x = "[a-p] sequence Duration (ms)", y = "Euclidean distance") +
+  facet_grid(~Age) +
+ ggtitle("[a]-[p] coarticulation by sequence duration, \n morphological environment, and age") +
+ ylim(4, 30)
+
+#dev.off()
+```
+
+I guess this could be conflated with word position. Quechua only has suffixes so all the tokens in the across-morpheme condition are word-final and all the tokens in the within-morpheme condition are word-initial. But word-initial segments are more emphasized and phonetically salient (less reduction, etc.) so if anything you would think you would see longer duration in the within-morpheme segments. Also stress was consistent between the two conditions. 
+```{r effects by word, warning=FALSE}
+adultdf <- df.final %>%
+  filter(Age=='adult')
+#jpeg("byword.jpg", width = 750, height = 750)
+
+ggplot(adultdf, aes(ap_duration*1000, euc_dist, color=Morph_status, fill=Morph_status)) +
+ geom_point(size=.5) +
+ geom_smooth(method = "lm") +
+ labs(x = "[a-p] sequence Duration (ms)", y = "Euclidean distance") +
+  facet_wrap(~Word, nrow=4) +
+ ggtitle("Coarticulation by sequence duration, word, \n and morphological environment in adult speakers") +
+ ylim(4, 30)
+
+#dev.off()
+```
+
