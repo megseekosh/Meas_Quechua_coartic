@@ -1,0 +1,150 @@
+---
+title: "2_map_words"
+author: "Meg Cychosz"
+date: "3/4/2020"
+output: 
+  bookdown::pdf_document2:
+    keep_tex: true
+indent: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      cache=TRUE, 
+                      message=FALSE, 
+                      warning=FALSE)
+```
+
+```{r, load necessary packages, include = FALSE}
+#remotes::install_github('rstudio/rmarkdown') #until rmarkdown-papaja incompatibility is fixed
+library('doBy')
+library('dplyr')
+library('tidyverse')
+library('bookdown')
+library('ggpubr')
+library('data.table')
+library('kableExtra')
+```
+
+```{r load data, include=FALSE}
+data <- read.csv('thirds_CV.anonymized.csv')
+
+data <- data %>% filter(Note !='DONT USE') # if commented not to use
+data <- data %>% filter(Note != 'DONT USE ACROSS MORPHEME')
+data <- data %>% filter(Age !='4') # four year olds didn't do this task
+data <- data %>% filter(Phone != 'p\'') # ejective p' removed
+
+data$Word <- plyr::revalue(data$Word, c("hatunmama`"="hatunmama", "hatun mama"="hatunmama", "hatun mama-mang"="hatunmama-mang", "hatun mama-pi"="hatunmama-pi"))
+```
+
+```{r create morph_df, include=FALSE}
+morph_df <-
+  data[which(
+    data$Word == 'imilla-pi' |
+      data$Word == 'juk\'ucha-pi' |
+      data$Word == 'llama-pi' |
+      data$Word == 'llama' |
+      data$Word == 'llama-mang' |
+      data$Word == 'papa-pi' |
+      data$Word == 'sunkha-pi' |
+      data$Word == 't\'ika-pi' |
+      data$Word == 'uhut\'a-pi' |
+      data$Word == 'waka-pi' |
+      data$Word == 'wallpa-pi' |
+      data$Word == 'wawa-pi' |
+      data$Word == 'api' |
+      data$Word == 'api-pi' |
+      data$Word == 'papa' |
+      data$Word == 'llapa' |
+      data$Word == 'mama' |
+      data$Word == 'pampa' |
+      data$Word == 'q\'apa' |
+      data$Word == 'thapa' |
+      data$Word == 'chita-pi' |
+      data$Word == 'cuca-mang' |
+      data$Word == 'cuca-pi' |
+      data$Word == 'hampiri' |
+      data$Word == 'hampiri-pi' |
+      data$Word == 'hatunmama' |
+      data$Word == 'hatunmama-pi' |
+      data$Word == 'hatunmama-mang' |
+      data$Word == 'imilla-mang' |
+      data$Word == 'llapa-mang' |
+      data$Word == 'llapa-pi' |
+      data$Word == 'mama-mang' |
+      data$Word == 'mama-pi' |
+      data$Word == 'pampa-mang' |
+      data$Word == 'pampa-pi' |
+      data$Word == 'papa-mang' |
+      data$Word == 'q\'apa-mang' |
+      data$Word == 'chita-mang' |
+      data$Word == 'q\'apa-pi' |
+      data$Word == 'sunkha-mang' |
+      data$Word == 't\'ika-mang' |
+      data$Word == 'thapa-mang' |
+      data$Word == 'thapa-pi' |
+      data$Word == 'waka-mang' |
+      data$Word == 'wallpa-mang' |
+      data$Word == 'wawa-mang' |
+      data$Word == 'juk\'ucha-mang' 
+  ),]
+```
+
+```{r, make binary age group, include=FALSE}
+morph_df$Binary_age <- plyr::mapvalues(
+  morph_df$Age,
+  from =
+    c('adult', '10', '9', '8', '7', '6', '5'),
+  to = c("adult", "child", "child", "child",
+         "child", "child", "child")
+)
+```
+
+```{r, create rows for each measurement in vector, include=FALSE}
+# convert structure of spectral measurements to something computable
+# remove brackets
+morph_df$Spectrum <-
+  gsub(']', '', morph_df$Spectrum)
+morph_df$Spectrum <-
+  gsub('[', '', morph_df$Spectrum, fixed = TRUE) # open bracket denotes regex so fix it
+
+
+# convert measurements to string and then numeric
+morph_df$variable_sep <-
+  str_extract_all(morph_df$Spectrum, "[-0-9\\.]+")
+
+morph_df$spec_vector <-
+  lapply(morph_df$variable_sep, FUN = as.numeric)
+
+morph_df <- as.data.frame(morph_df)
+```
+
+```{r, find raw difference between vectors, include=FALSE}
+
+# find euc distance between vectors
+diff_morphdf <- morph_df %>%
+  group_by(Word, Speaker, Word_duration) %>%  # this relies on each unique item spoken by the speaker having unique length (some might not)
+  mutate(spec_diff = map2(spec_vector, lead(spec_vector), `-`)) %>% # sanity check
+  mutate(euc_dist = map2(spec_vector, lead(spec_vector), function(x, y)
+    sqrt(sum((x - y) ^ 2)))) %>%
+  as.data.frame() 
+
+diff_morphdf <- diff_morphdf %>% 
+  group_by(Word, Speaker, Word_duration) %>% 
+  mutate(aX_duration = map2(Phone_duration, lead(Phone_duration), `+`)) %>% 
+  as.data.frame()  
+diff_morphdf$aX_duration <- as.numeric(diff_morphdf$aX_duration)
+
+
+# remove NA rows where measurement was made upon but not stored
+df.final <- subset(diff_morphdf, euc_dist != 'NA')
+df.final$euc_dist <- as.numeric(df.final$euc_dist)
+```
+
+```{r, include=FALSE}
+df.final <- df.final %>%
+  select(-variable_sep, -spec_vector, -spec_diff)
+
+write_csv(df.final, 'mapped_words_anonymized.csv')
+```
+
