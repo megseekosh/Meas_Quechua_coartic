@@ -1,7 +1,7 @@
-### Meas_Quechua_coartic
+# Meas_Quechua_coartic
 Measure and analyze child and adult coarticulatory patterns via mel frequency spectra
 
-# Acoustic measures
+## Acoustic measures
 
 **get_mel_spec_bythirds.py** - option to compute coarticulation spectrally (spectral distance) by taking spectra from middle third of two adjacent phones and computing average spectrum from each phone; generates filename+`mel_spectrum.csv` which can be read into R for post-processing
 
@@ -15,7 +15,7 @@ To execute this script:
 
   python3 get_mel_spec_bythirds.py walk
 
-# Data analysis
+## Data analysis
 
 **1_rename_participants.R** - gives participants anonymous IDs; not included in repo as it contains deanonymized participant information
 
@@ -27,13 +27,13 @@ To execute this script:
 Option to measure spectrally (spectral distance)
 or temporally (more dynamic) 
 
-# Additional code in this repo
+## Additional code in this repo
 
-coartic_as_transition.py - option to compute coarticulation temporally (more dynamic); one technique used to measure coarticulation in Cychosz et al. (2019)
+**coartic_as_transition.py** - option to compute coarticulation temporally (more dynamic); one technique used to measure coarticulation in Cychosz et al. (2019)
 
-get_mel_spec.py - option to compute coarticulation spectrally (spectral distance); one technique used to measure coarticulation in Cychosz et al. (2019)
+**get_mel_spec.py** - option to compute coarticulation spectrally (spectral distance); one technique used to measure coarticulation in Cychosz et al. (2019)
 
-# Papers
+## Papers
 
 Cychosz, M. (_submitted_). [Word structure in early Quechua speech: Coarticulation and inflectional morphology.] (https://psyarxiv.com/26uyb) 
 
