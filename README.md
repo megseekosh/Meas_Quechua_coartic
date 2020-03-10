@@ -7,13 +7,16 @@ Measure and analyze child and adult coarticulatory patterns via mel frequency sp
 
 To execute this script:
 
-1. move inside of corpus directory that contains .wav and .TextGrid files _with the same name_  
+1. In terminal, move inside of corpus directory that contains .wav and .TextGrid files _with corresponding names_  
 
-  code here
-  
-2. run script over entire directory
+ ```python
+cd specify/directory/location/corpus_directory
+```
+2. Run script over entire directory
 
-  python3 get_mel_spec_bythirds.py walk
+ ```python
+  python3 specify/file/location/get_mel_spec_bythirds.py walk
+```
 
 ## Data analysis
 
