@@ -1,5 +1,5 @@
 # Meas_Quechua_coartic
-Measure and analyze child and adult coarticulatory patterns via mel frequency spectra. Repo contains scripts and data necessary to replicate analyses in [Cychosz (2020)] (https://psyarxiv.com/26uyb). 
+Measure and analyze child and adult coarticulatory patterns via mel frequency spectra. Repo contains scripts and data necessary to replicate analyses in [Cychosz 2020] (https://psyarxiv.com/26uyb). 
 
 ## Acoustic measures
 
