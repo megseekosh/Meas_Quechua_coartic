@@ -52,7 +52,7 @@ cd specify/directory/location/corpus_directory
 
 ## Papers
 
-Cychosz, M. (_submitted_). [Word structure in early Quechua speech: Coarticulation and inflectional morphology.] (https://psyarxiv.com/26uyb) 
+Cychosz, M. (_submitted_). [Word structure in early Quechua speech: Coarticulation and inflectional morphology.] (https://psyarxiv.com/26uyb)
 
 Cychosz, M., Edwards, J., Munson, B., & Johnson, K. (2019). [Spectral and temporal measures of coarticulation in child speech.](http://linguistics.berkeley.edu/~mcychosz/Cychosz_JASA-EL_2019.pdf) _Journal of the Acoustical Society of America-Express Letters, 146_(6), EL516-EL522. 
 
