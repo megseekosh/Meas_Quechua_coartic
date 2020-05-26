@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = FALSE,
 ```
 
 ```{r, load necessary packages, include = FALSE}
-#remotes::install_github('rstudio/rmarkdown') #until rmarkdown-papaja incompatibility is fixed
+remotes::install_github('rstudio/rmarkdown') #until rmarkdown-papaja incompatibility is fixed
 library('doBy')
 library('dplyr')
 library('tidyverse')
@@ -34,7 +34,7 @@ devtools::install_github("crsh/papaja")
 ```
 
 ```{r load data, include=FALSE}
-df.final <- read.csv('mapped_words_anonymized.csv')
+df.final <- read.csv('/Users/Meg/Box Sync/Dissertation/Experiment_2/analysis/2019/analysis_scripts/mapped_words_anonymized.csv')
 ```
 
 ```{r, make a VC_sequence variable, include=FALSE}
