@@ -1,7 +1,7 @@
 ---
-title: "Chapter 3 Results"
+title: "Quechua word structure results"
 author: "Meg Cychosz"
-date: "12/15/2019"
+date: "8/11/2020"
 output: 
   bookdown::pdf_document2:
     keep_tex: true
@@ -10,13 +10,13 @@ indent: true
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, 
-                      cache=TRUE, 
+                      cache=FALSE, 
                       message=FALSE, 
                       warning=FALSE)
 ```
 
 ```{r, load necessary packages, include = FALSE}
-remotes::install_github('rstudio/rmarkdown') #until rmarkdown-papaja incompatibility is fixed
+#remotes::install_github('rstudio/rmarkdown') #until rmarkdown-papaja incompatibility is fixed
 library('doBy')
 library('dplyr')
 library('tidyverse')
@@ -27,9 +27,9 @@ library('stargazer')
 library('data.table')
 library("normtest")
 library('glmmTMB')
-library('TMB')
 library('lme4')
 library('kableExtra')
+library('wec')
 devtools::install_github("crsh/papaja")
 ```
 
@@ -47,15 +47,15 @@ levels(df.final$VC_sequence) <- list("am"=c('juk\'ucha-mang',  'wawa-mang', 'imi
 
 # Results
 
-The primary research question in this experiment asks how child and adult Quechua speakers coarticulate between and within morphemes. The results begin with descriptive statistics concerning the amount of coarticulation by age group (children aged 5 through adults) and morphological environment (within versus between morphemes). Additional descriptive statistics outline the duration of the VC sequences by age group and morphological environment. Then, a series of models are fit to predict coarticulation and duration by age and morphological environment. These models are complemented by an analysis highlighting how coarticulation interacts with duration differently in adults and children in the two morphological environments. 
+The primary research objective of this study is to measure the speech production patterns of child and adult Quechua speakers between and within morphemes. Results begin with descriptive statistics concerning the amount of coarticulation and VC sequence duration by age group and morphological environment (within versus between morphemes). Then, a series of models are fit to predict coarticulation and duration by age and morphological environment. These models are complemented by an analysis highlighting how coarticulation interacts with duration differently in adults and children in the two morphological environments. 
 
-All analyses were conducted in the RStudio computing environment (version: 1.2.5019; rstudio, 2019). Data visualizations were created with `ggplot2` (Wickham, 2016). Modeling was conducted using the `lme4` (Bates et al., 2015), `lmerTest` (Kuznetsova et al., 2017), and `glmmTMB` (Brooks et al., 2017) packages and summaries were presented with `papaja` (Aust & Barth, 2019) and `Stargazer` (Hlavac, 2018). Tests of residual normality were conducted using the `normtest` package (Gavrilov & Pusev, 2014). The significance of potential model parameters was determined using a combination of log-likelihood comparisons between models, AIC estimations, and p-values procured from model summaries. In all models, continuous predictors were mean-centered to facilitate model interpretation. 
+All analyses were conducted in the RStudio computing environment (version: 1.3.1056; rstudio, 2020). Data visualizations were created with `ggplot2` (Wickham, 2016). Modeling was conducted using the `lme4` (Bates et al., 2015), `lmerTest` (Kuznetsova et al., 2017), and `glmmTMB` (Brooks et al., 2017) packages and summaries were presented with `papaja` (Aust & Barth, 2019) and `Stargazer` (Hlavac, 2018). Tests of residual normality were conducted using the `normtest` package (Gavrilov & Pusev, 2014). The significance of potential model parameters was determined using a combination of log-likelihood comparisons between models, AIC estimations, and p-values procured from model summaries. In all models, continuous predictors were mean-centered to facilitate model interpretation. 
 
-## Descriptive statistics
+## Modeling interaction of coarticulation and duration 
 
 ### Coarticulation
 
-The degree of coarticulation between the VC sequences [ap] and [am] was measured using the spectral distance metric described in experiment one For this coarticulation metric, coarticulation is quantified as the Euclidean distance between the spectral vectors of two adjacent phones, henceforth the Mel spectral distance. In this outcome measure, a larger spectral distance between phones equates to *less* coarticulation between the phones. 
+The degree of coarticulation between the VC sequences [ap] and [am] was measured using the spectral distance metric described in the Methods. For this metric, coarticulation is quantified as the Euclidean distance between the spectral vectors of two adjacent phones, henceforth the Mel spectral distance. A larger spectral distance between phones equates to *less* coarticulation between the phones. 
 
 ```{r, coartic-descrip-table, include=FALSE}
 # calculate mean specdistanace/coartic by age, VC_sequence, morph_status and put in table 
@@ -107,15 +107,15 @@ knitr::kable(t, caption = 'Mean spectral distance between [a] and [m] by age and
   add_header_above(c(" " = 1, "Across boundary" = 2, "Within boundary" = 2))
 ```
 
+Table \@ref(tab:ap-coartic-tbl) shows the mean Mel spectral distance between the segments in [ap] (words inflected with *-pi* for the across morpheme boundary condition) and Table \@ref(tab:am-coartic-tbl) shows this for [am] (words inflected with *-man* for the across morpheme boundary condition). Unsurprisingly, there is a larger average spectral distance between the vowel and plosive in [ap] than the vowel and nasal in [am] because the segments in [am] have increased acoustic similarity (sonority, voicing). Next, looking by age group for coarticulation between [ap] shows that the amount of coarticulation between segments increases as children age. This is likely due to the increased speaking rate in the older cohorts and adults, as will become apparent when these results are crossed with sequence duration. There is also a large amount of between-child variability, even within age group (see Appendices I for by-speaker plots). For example, the eight-year-old children appear to have the largest spectral distance between [a] and [p], but the group SD is also highest.
 
-Table \@ref(tab:ap-coartic-tbl) shows the mean Mel spectral distance between the segments in [ap] (words inflected with *-pi* for the across morpheme boundary condition) and Table \@ref(tab:am-coartic-tbl) shows this for [am] (words inflected with *-man* for the across morpheme boundary condition). Unsurprisingly, there is a larger average spectral distance between the vowel and plosive in [ap] than the vowel and nasal in [am] because the segments in [am] have increased acoustic similarity (sonority, voicing). Next, looking by age group for coarticulation between [ap], it is apparent that the amount of coarticulation between segments increases as children age. This is likely due to the increased speaking rate in the older cohorts and adults, as will become apparent when these results are crossed with sequence duration. There is less within age group variability in [ap] productions in the adult speakers as well (reflected in the smaller SD of the mean for the adults). Variability does not appear to decrease linearly as both the nine and ten-year-old cohorts exhibit larger SDs than the five and six-year-olds. However, this could also reflect the smaller sample sizes in the older cohorts (5 ten-year-olds and 5 nine-year-olds but 10 each in the five- and six-year-old cohorts). 
+There is less within-group variability in [ap] productions in the adult speakers (reflected in the adults' smaller SD of the mean). Furthermore, variability does not appear to decrease linearly as both the nine and ten-year-old cohorts exhibit larger SDs than the five and six-year-olds. However, this could also reflect the smaller sample sizes in the older cohorts (5 ten-year-olds and 5 nine-year-olds but 10 each in the five- and six-year-old cohorts). 
 
-For the coarticulation patterns between segments in [am], adults and children appear to coarticulate similarly, irrespective of age group. There is slightly greater variability in the amount of coarticulation (larger SD) in the adult group. Overall, the difference in developmental coarticulatory patterns between the VC sequence [am] and the sequence [ap] could be due to differences in the *-man* suffix use in Quechua (frequency, productivity). Alternatively, differences between these sequences could be  due to the acoustic differences between [ap] and [am] as segments in [am] are more acoustically similar than segments in [ap]. 
-
+For the coarticulation patterns between segments in [am], adults and children coarticulate similarly, irrespective of age group. There is slightly greater variability in the amount of coarticulation (larger SD) in the adult group. 
 
 ### Duration
 
-We next turned to descriptive statistics describing the interaction of coarticulation and sequence duration. Duration could interact with coarticulation, and age, as speakers coarticulate more in fast speech (Gay, 1981), and adults speak faster than children (Lee et al., 1999). 
+The following descriptive statistics outline the interaction of coarticulation and sequence duration. Duration interacts with coarticulation, and age, as speakers coarticulate more in fast speech (Gay, 1981), and adults speak faster than children (Lee et al., 1999). 
 
 
 ```{r, dur-descrip-table, include=FALSE}
@@ -167,18 +167,28 @@ knitr::kable(durt, caption = 'Mean duration of [am] sequence by age and word pos
   add_header_above(c(" " = 1, "Across boundary" = 2, "Within boundary" = 2))
 ```
 
+Table \@ref(tab:ap-dur-tbl) maps average sequence duration of [ap] by age and word position and Table \@ref(tab:am-dur-tbl) does so for [am]. Duration of [ap] decreases with age, with adult speakers exhibiting the shortest average [ap] duration for both word positions. The average duration of [ap] sequences within morphemes tended to be longer than the duration of [ap] sequences across boundaries for all of the children. This pattern was reversed in the adult speakers whose average [ap] duration within morpheme boundaries was actually *shorter* than across. The patterns by morphological environment will be revisited in the following section of the Results. 
+
+Turning to the sequence [am], the average duration of [am] in adult speakers was shorter than all of the children; and like [ap], [am] duration also decreases with age, across and within morphemes. 
+
+Concerning differences by word position, all child age groups showed, on average, shorter [am] durations in the across morpheme condition, contrary to the finding that [ap] sequence duration was longer in the across morpheme condition for adults. However, the average duration of [am] by word position in adults only differed by approximately 2 ms while the average within morpheme condition in children was approximately 30 ms greater than the across morpheme condition. Thus, for both [am] and [ap] sequences, there appears to be a difference in sequence duration by word position for adult and child speakers. In the following section we turn to the modeling of coarticulation before illustrating how degree of coarticulation interacts with duration differently in the adults and children. 
+
+```{r, create syllable count}
+df.final$syllable_count <- df.final$new_word
+df.final$syllable_count <- factor(df.final$syllable_count)
+levels(df.final$syllable_count) <- list("2"=c("mama", "thapa",'pampa', 'q\'apa', 'llapa', 'thapa','llama','api','papa','llama-pi_within', 'mama-pi_within', 'thapa-pi_within', 'pampa-pi_within', 'q\'apa-pi_within',  'papa-pi_within',  'llapa-pi_within'), 
+                                        
+      "3"=c("t\'ika-pi", "wallpa-pi", 'waka-pi', 'wawa-pi', 'sunkha-pi', 'chita-pi', 'cuca-pi', 'llama-pi_across','mama-pi_across','papa-pi_across', 'llapa-pi',  'papa-pi', 'llama-pi', 'mama-pi', 'thapa-pi', 'pampa-pi', 'llapa-pi_across', 'thapa-pi_across', 'pampa-pi_across','wawa-mang','chita-mang', 'q\'apa-mang', 'q\'apa-pi', 'thapa-mang', 'pampa-mang', 'mama-mang', 'wallpa-mang', 'waka-mang', 'sunkha-mang', 'cuca-mang', 'llapa-mang', 't\'ika-mang', 'papa-mang', 'llama-mang', 'api-pi', 'hampiri'), 
+      
+      "4"=c("imilla-pi", "juk\'ucha-pi",'uhut\'a-pi','hatunmama-pi_within','juk\'ucha-mang','imilla-mang','hampiri-pi','hatunmama'), 
+      
+      "5"=c( 'hatunmama-pi_across', 'q\'apa-pi_across', 'hatunmama-mang', 'hatunmama-pi'))
 
 
-Table \@ref(tab:ap-dur-tbl) maps average sequence duration of [ap] by age and word position and Table \@ref(tab:am-dur-tbl) does similarly for [am]. Overall, duration of [ap] decreases with age, with adult speakers exhibiting the shortest average duration for [ap] for both word positions. Of note is that the average duration of [ap] sequences within morphemes tended to be longer than the duration of [ap] sequences across boundaries for all of the children. This pattern was reversed in the adult speakers, however, whose average [ap] duration within morpheme boundaries was actually *shorter* than across. This pattern will be revisited in the modelling portion of the Results. 
+df.final$Environment <- plyr::mapvalues(df.final$Environment, from = c("across morpheme", "within morpheme"), to=c("across", "within"))
+```
 
-Turning to the sequence [am], the average duration of the [am] sequence in adult speakers was shorter than all of the child speakers; and like [ap], [am] duration also appears to decrease with age. This pattern of [am] duration decreasing with age is consistent for both word positions, across and within morphemes. 
-
-Concerning differences by word position, all age groups showed, on average, shorter [am] durations in the across morpheme condition, contrary to the finding that [ap] sequence duration was longer in the across morpheme condition for adults. However, it is important to note the average duration of [am] by word position in adults only differed by approximately 3 ms while the average within morpheme condition in children was approximately 40 ms greater than the across morpheme condition in children. Thus, for both [am] and [ap] sequences, there appears to be a difference in sequence duration by word position for adult and child speakers. In the following section we turn to the modeling of coarticulation before illustrating how degree of coarticulation interacts with duration differently in the adults and children. 
-
-## Modelling interaction of coarticulation and duration 
-
-
-```{r, readying variables for modelling, include=FALSE}
+```{r, readying variables for modeling, include=FALSE}
 # standardize variables
 center_scale <- function(x) {
   scale(x, scale = FALSE)
@@ -186,9 +196,9 @@ center_scale <- function(x) {
 df.final$Sequence_duration_scaled <- center_scale(df.final$aX_duration)*1000 # to get ms unit
 ```
 
-```{r, readying variables for modelling2, include=FALSE}
+```{r, readying variables for modeling2, include=FALSE}
 # give model variables transparent names - note these names will change to be the scaled variables eventually (probably)
-df.final$Environment <- df.final$Morph_status
+df.final$Environment <- as.factor(df.final$Morph_status)
 df.final$Environment <- relevel(df.final$Environment, ref='within morpheme')  #ensure we have the right ref level
 
 adult <- df.final %>% filter(Binary_age=='adult')
@@ -205,176 +215,237 @@ df.final.output <- df.final %>%
 write.csv(df.final.output, file = "/Users/Meg/Box Sync/Dissertation/Experiment_3/results/morph_data.csv", row.names = FALSE)
 ```
 
-The central research question in this study asked if child and adult Quechua speakers would coarticulate similarly between VC sequences across versus within morpheme boundaries. To answer this question, a series of generalized linear mixed effect models (GLMMs) were fit to predict degree of coarticulation (Mel spectral distance between each V and C). GLMMs were chosen instead of the more common linear mixed effect models due to the non-normality of the residual **VC Sequence duration** (henceforth simply **Sequence Duration**) which was included in all models. (Shapiro tests of kurtosis and skewness for **Sequence duration** indicated that we could reject the null hypothesis that the residual's distribution did not differ significantly from a normal distribution. Kurtosis t=`r round(durkurt$statistic,2)`, p<.001 and skewness: t=`r round(durskew$statistic,2)`, p<.001 [Shapiro et al., 1968].) Specifically, the response variable **Spectral distance** and the residual **Sequence duration** are both limited to non-negative values (as all VC sequences had some distance between the V and C and all had a duration), with a resultant right skew to the data distribution. 
+### Modeling 
 
-The choice to fit gamma GLMMs, as opposed to log-normalizing **Sequence duration** and fitting linear mixed models, reflects recent suggestions in cognitive psychology to avoid data transformation, even for commonly-transformed variables such as time/duration, in an effort to facilitate between-study comparison (Lo & Andrews, 2015). Consequently, gamma GLMMs were fit using a log linking function to appropriately model the skewed, non-Gaussian distribution of the residual.  
+A series of generalized linear mixed effect models (GLMMs) were fit to predict degree of coarticulation (Mel spectral distance between each V and C). GLMMs were chosen instead of the more common linear mixed effect models due to the non-normality of the residual **VC Sequence duration** (henceforth simply **Sequence Duration**) which was included in all models.^[Shapiro tests of kurtosis and skewness for **Sequence duration** indicated that we could reject the null hypothesis that the residual's distribution did not differ significantly from a normal distribution. Kurtosis t=`r round(durkurt$statistic,2)`, p<.001 and skewness: t=`r round(durskew$statistic,2)`, p<.001 (Shapiro et al., 1968).] Specifically, the response variable **Spectral distance** and the residual **Sequence duration** are both limited to non-negative values (as all VC sequences had some distance between the V and C and all had a duration), with a resultant right skew to the data distribution. 
+
+The choice to fit gamma GLMMs, as opposed to log-normalizing **Sequence duration** and fitting linear mixed models, reflects some recent suggestions in cognitive psychology to avoid data transformation, even for commonly-transformed variables such as time, duration, or response time, to facilitate between-study comparison (Liceralde, 2018; Lo & Andrews, 2015). However, there is not yet a consensus in the literature on the use of transformed versus untransformed variables. Consequently, gamma GLMMs were fit using a log linking function to appropriately model the skewed, non-Gaussian distribution of the residual. Then, in a supplementary analysis, all modeling procedures were replicated with linear mixed effects models that included a transformed **Sequence duration** variable. Final model results were broadly consistent across the two modeling approaches; see Supplementary analysis for details.  
 
 ```{r adult-child model, include=FALSE}
-summary(all_m <- glmmTMB(euc_dist ~ 
-                        (1 | Speaker) + 
-                        (1 | Word), 
+summary(all_m0 <- glmmTMB(euc_dist ~ 
+                        (1 | Speaker:Word), 
                       data = df.final, 
                       family="Gamma"(link="log")))
 
+summary(all_m <- glmmTMB(euc_dist ~ 
+                        syllable_count + 
+                        (1 | Speaker:Word), 
+                      data = df.final, 
+                      family="Gamma"(link="log")))
+anova(all_m0, all_m) # improves
 
-summary(all_m1 <- glmmTMB(euc_dist ~ 
+summary(all_m1 <- glmmTMB(euc_dist ~
+                        syllable_count + 
                         Sequence_duration_scaled + 
-                        (1 | Speaker) + 
-                        (1 | Word), 
+                        (1 | Speaker:Word), 
                       data = df.final, 
                       family="Gamma"(link="log")))
 anova(all_m, all_m1) # improves
 
 summary(all_m2 <- glmmTMB(euc_dist ~ 
+                        syllable_count + 
                         Sequence_duration_scaled + 
                         VC_sequence + 
-                        (1 | Speaker) + 
-                        (1 | Word), 
+                        (1 | Speaker:Word),
                       data = df.final, 
                       family="Gamma"(link="log")))
 anova(all_m1, all_m2) # improves
 
 summary(all_m3 <- glmmTMB(euc_dist ~ 
+                        syllable_count + 
                         Sequence_duration_scaled + 
                         VC_sequence + 
                         Binary_age +   
-                        (1 | Speaker) + 
-                        (1 | Word), 
+                        (1 | Speaker:Word), 
                       data = df.final, 
                       family="Gamma"(link="log")))
-anova(all_m2, all_m3) # marginally improves
+anova(all_m2, all_m3) # improves
 
 summary(all_m4 <- glmmTMB(euc_dist ~ 
+                        syllable_count + 
                         Sequence_duration_scaled + 
                         VC_sequence + 
                         Binary_age +   
                         Environment + 
-                        (1 | Speaker) + 
-                        (1 | Word), 
+                        (1 | Speaker:Word), 
                       data = df.final, 
                       family="Gamma"(link="log")))
-anova(all_m3, all_m4) # doesn't improve; check interaction next
+anova(all_m3, all_m4) # improves; check interaction next
 
+contrasts(df.final$syllable_count) <- contr.wec(df.final$syllable_count, "5") # weighted (sample) mean
 summary(all_m5 <- glmmTMB(euc_dist ~ 
+                        syllable_count + 
                         Sequence_duration_scaled*VC_sequence*Binary_age*Environment + 
-                        (1 | Speaker) + 
-                        (1 | Word), 
+                        (1 | Speaker:Word), 
                       data = df.final, 
                       family="Gamma"(link="log")))
-anova(all_m4, all_m5) # improves over model without interaction
+anova(all_m3, all_m5) # improves over model without interaction; FINAL MODEL
 ```
 
-A GLMM was fit to predict the spectral distance between segments in the VC sequences. Baseline models included random effects of **Participant** and **Word** (models with random slopes of **Participant** by **Word** did not converge, possibly due to the number of repetitions per speaker; see Methods). Model building then began in a forward-testing manner with predictors added in the following order: **Sequence duration**, **VC sequence** ([ap] or [am]), **Age** (adult or child), **Environment** ([within morpheme or between morphemes]), and interactions. The best model fit included the four-variable interaction of **Sequence duration**, **VC sequence**, **Age**, and **Environment**. The summary for the model containing adults and children together is included in listed in Appendix D. This four-variable interaction indicates that the coarticulation and duration patterns differ between adults and children. Consequently, given the difficulty in interpreting four-variable interactions, separate models were fit for adults and children to facilitate coefficient interpretation. 
+Baseline GLMMs included random slopes of **Participant** by **Word**. Model building then began in a forward-testing manner with predictors added in the following order: **Syllable Count** (fit with weighted effect coding for all models), **Sequence duration**, **VC sequence** ([ap] or [am]), **Age** (adult or child), **Environment** ([within morpheme or between morphemes]), and interactions. **Syllable Count** was included in the modeling in an attempt to isolate the effect of **Environment** on speech production from prosodic structure since within-morpheme stimulus items tended to be shorter than across-morpheme items (see Methods).^[To further ensure that the difference by **Environment** was due to morphological structure, all models were additionally fit with the covariate **Word Duration** (in ms), instead of **Syllable Count** (models were not fit with both since **Word Duration** and **Syllable Count** are highly correlated). Results were broadly the same: the three-way interaction of **Sequence duration**, **VC sequence**, and **Environment** improved upon model fits controlling for **Word Duration** with the same direction of the effect. Like the models that control for prosodic structure with the covariate, **Syllable Count**, these models also suggest that the speech production differences by word environment were more likely morphological, not prosodic, in nature.] 
 
-```{r child coartic models, include=FALSE}
+The best model fit included **Syllable Count** and the four-variable interaction of **Sequence duration**, **VC sequence**, **Age**, and **Environment**. This four-variable interaction indicates that the relationship between coarticulation and duration differs between adults and children. Given the difficulty in interpreting four-variable interactions, separate models were fit for adults and children to facilitate coefficient interpretation. The summary for the model containing adults and children together is included in Appendix E. 
+
+```{r child coartic models, include=FALSE, warning=FALSE}
+child$Speaker <- as.factor(child$Speaker)
+child$Word <- as.factor(child$Word)
+child$Age <- as.factor(child$Age)
+
+summary(m0 <- glmmTMB(euc_dist ~ 
+               (1 | Speaker:Word), 
+               data = child, 
+                family="Gamma"(link="log")))
+
 summary(m <- glmmTMB(euc_dist ~ 
-                        (1 | Speaker) + 
-                        (1 | Word), 
-                      data = child, 
-                      family="Gamma"(link="log")))
-
+               syllable_count +       
+               (1 | Speaker:Word), 
+               data = child, 
+                family="Gamma"(link="log")))
+anova(m0, m) # improves
 
 summary(m1 <- glmmTMB(euc_dist ~ 
-                        Sequence_duration_scaled + 
-                        (1 | Speaker) + 
-                        (1 | Word), 
-                      data = child, 
-                      family="Gamma"(link="log")))
-  anova(m, m1) # improves
+               syllable_count +       
+               Sequence_duration_scaled + 
+               (1 | Speaker:Word), 
+               data = child, 
+               family="Gamma"(link="log")))
+anova(m, m1) # improves
 
 summary(m2 <- glmmTMB(euc_dist ~ 
-                        Sequence_duration_scaled + 
-                        VC_sequence + 
-                        (1 | Speaker) + 
-                        (1 | Word), 
-                      data = child, 
-                      family="Gamma"(link="log")))
-  anova(m1, m2) # improves 
+               syllable_count +       
+               Sequence_duration_scaled + 
+               VC_sequence + 
+               (1 | Speaker:Word), 
+               data = child, 
+               family="Gamma"(link="log")))
+anova(m1, m2) # improves 
   
 summary(m3 <- glmmTMB(euc_dist ~ 
+                        syllable_count + 
                         Sequence_duration_scaled + 
                         VC_sequence + 
                         Environment + 
-                        (1| Speaker) + 
-                        (1 | Word), 
+                        (1 | Speaker:Word), 
                       data = child, 
                       family="Gamma"(link="log")))
-  anova(m2, m3) # marginally improves
+  anova(m2, m3) # doesn't improve
 
 # but visuals suggest three-way interaction
-summary(across.ap <- glmmTMB(euc_dist ~ 
-                        Sequence_duration_scaled*Environment*VC_sequence + 
-                        (1| Speaker) + 
-                        (1 | Word), 
+summary(m4 <- glmmTMB(euc_dist ~ 
+                      syllable_count + 
+                      Sequence_duration_scaled*Environment*VC_sequence + 
+                      (1 | Speaker:Word), 
                       data = child, 
                       family="Gamma"(link="log")))
-  improve_test <- anova(m3, across.ap) # improves; FINAL MODEL
+improve_test <- anova(m3, m4) # improves
   
 # to see if age group variable improves model fit
-summary(m5 <- glmmTMB(euc_dist ~ 
-                        Sequence_duration_scaled*Environment*VC_sequence + 
-                        Age +
-                        (1| Speaker) + 
-                        (1 | Word), 
+contrasts(child$Age) <- contr.wec(child$Age, "5") # weighted (sample) mean
+contrasts(child$syllable_count) <- contr.wec(child$syllable_count, "5") # weighted (sample) mean
+summary(across.ap <- glmmTMB(euc_dist ~ 
+                      syllable_count + 
+                      Sequence_duration_scaled*Environment*VC_sequence + 
+                      Age +
+                      (1 | Speaker:Word), 
                       data = child, 
                       family="Gamma"(link="log")))
-anova(across.ap, m5) # does not improve; 
+anova(m4, across.ap) # improves; FINAL MODEL
   
 # extract details
 child_msum <- summary(across.ap)$coefficients
+
+# let's do another check that the effect of environment isn't due to word length
+summary(m5 <- glmmTMB(euc_dist ~ 
+                        Word_duration + 
+                        Sequence_duration_scaled*VC_sequence*Environment + 
+                        Age +
+                        (1 | Speaker:Word), 
+                      data = child, 
+                      family="Gamma"(link="log")))
 ```
 
 ```{r adults coartic models, include=FALSE}
-
-summary(adultm <- glmmTMB(euc_dist ~ 
-                             (1 | Speaker) + 
-                             (1 | Word), 
-                           data = adult, 
+# adult words are coded differently so map them appropriately
+adult$Word <- plyr::mapvalues(adult$new_word, 
+                                     from = c("llapa", 
+                                              "llama", 
+                                              "mama",
+                                              "pampa",
+                                              "papa",
+                                              "q\'apa",
+                                              "thapa"), 
+                                     to = c("llapa-pi_within", 
+                                            "llama-pi_within", 
+                                            "mama-pi_within",
+                                            "pampa-pi_within",
+                                            "papa-pi_within",
+                                            "q\'apa-pi_within",
+                                            "thapa-pi_within"))
+summary(adultm0 <- glmmTMB(euc_dist ~ 
+                          (1 | Speaker:Word), 
+                          data = adult, 
                           family="Gamma"(link="log")))
 
+summary(adultm <- glmmTMB(euc_dist ~ 
+                          syllable_count + 
+                          (1 | Speaker:Word), 
+                          data = adult, 
+                          family="Gamma"(link="log")))
+anova(adultm0, adultm)
+
 summary(adultm1 <- glmmTMB(euc_dist ~ 
+                             syllable_count + 
                              Sequence_duration_scaled + 
-                             (1 | Speaker) + 
-                             (1 | Word), 
+                             (1 | Speaker:Word), 
                            data = adult, 
                            family="Gamma"(link="log")))
   anova(adultm, adultm1) # improves
 
 summary(adultm2 <- glmmTMB(euc_dist ~ 
+                             syllable_count + 
                              Sequence_duration_scaled + 
                              VC_sequence + 
-                             (1 | Speaker) + 
-                             (1 | Word), 
+                            (1 | Speaker:Word), 
                            data = adult, 
                            family="Gamma"(link="log")))
   anova(adultm1, adultm2) # improves
 
 summary(adultm3 <- glmmTMB(euc_dist ~ 
+                             syllable_count + 
                              Sequence_duration_scaled + 
                              VC_sequence + 
                              Environment + 
-                             (1 | Speaker) + 
-                             (1 | Word), 
+                            (1 | Speaker:Word), 
                            data = adult, 
                            family="Gamma"(link="log")))
   anova(adultm2, adultm3) # doesn't improve
 
 # Morph_status does not improve fit but visualizations suggest three-way interaction
+contrasts(adult$syllable_count) <- contr.wec(adult$syllable_count, "5") # weighted (sample) mean
 summary(adult_model <- glmmTMB(euc_dist ~ 
+                             syllable_count + 
                              Sequence_duration_scaled*Environment*VC_sequence + 
-                             (1 | Speaker) + 
-                             (1 | Word), 
+                             (1 | Speaker:Word),
                            data = adult, 
                            family="Gamma"(link="log")))
 adult_llh_test <- anova(adultm3, adult_model) #  improves; FINAL MODEL
 
 # to extract details    
 adult_msum <- summary(adult_model)$coefficients
+
+# let's do another check that the effect of environment isn't due to word length
+summary(adult_m4 <- glmmTMB(euc_dist ~ 
+                        Word_duration + 
+                        Sequence_duration_scaled*VC_sequence*Environment + 
+                        (1 | Speaker:Word), 
+                      data = adult, 
+                      family="Gamma"(link="log")))
 ```
 
-For both the adult and child groups, models were fit to predict the spectral distance between segments in the VC sequences. Best model fit for the adult and child models included the three-variable interaction of **Sequence duration**, **VC sequence**, and **Environment**: the improvement of models with this interaction over models with the three independent effects was significant for the adult model with alpha level <.05 ($\chi$^2^ = `r round(adult_llh_test$Chisq[2],2)`, df=`r adult_llh_test$Df[1]`,`r adult_llh_test$Df[2]` p=.01) and the child model ($\chi$^2^ = `r round(improve_test$Chisq[2],2)`, df=`r improve_test$Df[1]`,`r improve_test$Df[2]`, p=.004). Throughout the results, the children's patterns are additionally broken apart by age to view differences between age groups. However, note that in the child model, the addition of the variable **Age Group** (levels: 5, 6, 7, 8, 9, 10) did not improve upon a model with the interaction of **Sequence duration**, **VC sequence**, and **Environment**. This fact suggests that the pattern of coarticulation and duration by morphological environment did not significantly vary by the child's age group. 
+Best model fit for the adult and child models included **Syllable Count** and the three-variable interaction of **Sequence duration**, **VC sequence**, and **Environment**: the improvement of models with this interaction over models with the four independent effects was significant for the adult model at alpha level <.05 ($\chi$^2^ = `r round(adult_llh_test$Chisq[2],2)`, df=`r adult_llh_test$Df[1]`,`r adult_llh_test$Df[2]` p=.02) and the child model ($\chi$^2^ = `r round(improve_test$Chisq[2],2)`, df=`r improve_test$Df[1]`,`r improve_test$Df[2]`, p<.001). The final adult model summary is listed in Table \@ref(tab:adult-model-sum) and the child model summary is listed in Table \@ref(tab:child-model-sum).^[In the model summaries for the children and adults, the coefficients and standard error measurements were multiplied by 100 to make the otherwise small coefficients more interpretable. This step does not effect the direction or magnitude of the effect between predictors and outcome variables.] 
 
-The final child model summary is listed in table \@ref(tab:child-model-sum) and the adult model summary is listed in table \@ref(tab:adult-model-sum). Note that in the model summaries for the children and adults, the coefficients and standard error measurements were multiplied by 100 to make the otherwise small coefficients more interpretable. This step does not effect the direction or magnitude of the effect between predictors and outcome variables. 
+For the child model, the addition of the variable **Age Group** (levels: 5, 6, 7, 8, 9, 10; fit with weighted effect coding) improved upon a model with **Syllable Count** and the interaction of **Sequence duration**, **VC sequence**, and **Environment**. The direction of the effect of **Age Group** indicates that the child participants tended to coarticulate more with age, just as the adults studied coarticulated more than the children, likely because the older children and adults spoke faster. 
+
 
 ```{r prepare model tables}
 glmms <- rbind(broom.mixed::tidy(adult_model, 
@@ -389,22 +460,38 @@ glmms <- rbind(broom.mixed::tidy(adult_model,
                
 glmms$term <- plyr::mapvalues(glmms$term, 
                                      from = c("(Intercept)", 
+                                              "syllable_count2",
+                                              "syllable_count3",
+                                              "syllable_count4",
                                               "Environmentacross morpheme:VC_sequenceap", 
                                               "Sequence_duration_scaled:Environmentacross morpheme", 
                                               "Sequence_duration_scaled:VC_sequenceap",
                                               "Environmentacross morpheme",
                                               "Sequence_duration_scaled",
                                               "Sequence_duration_scaled:Environmentacross morpheme:VC_sequenceap",
-                                              "VC_sequenceap"
+                                              "VC_sequenceap",
+                                              "Age10",
+                                              "Age9",
+                                              "Age8",
+                                              "Age7",
+                                              "Age6"
                                         ), 
                                      to = c("Intercept", 
+                                              "Syllable count:2",
+                                              "Syllable count:3",
+                                              "Syllable count:4",
                                             "Environment:across morpheme*VC sequence:ap", 
                                             "Sequence duration*Environment:across morpheme", 
                                             "Sequence duration*VC sequence:ap", 
                                             "Environment:across morpheme",
                                             "Sequence duration",
                                             "Sequence duration*Environment:across morpheme*VC sequence:ap",
-                                            "VC sequence:ap"
+                                            "VC sequence:ap",
+                                             "Age:10",
+                                             "Age:9",
+                                             "Age:8",
+                                             "Age:7",
+                                             "Age:6"
                                             ))
 glmms$conf.high <- round(as.numeric(glmms$conf.high),2)
 glmms$conf.low <- round(as.numeric(glmms$conf.low),2)
@@ -436,12 +523,11 @@ papaja::apa_table(glmms %>%
                   caption="Model predicting coarticulation in children") 
 ```
 
+In the adult and child models, a positive coefficient for the predictor **VC sequence**, with the reference level '[am]', shows that there was greater spectral distance between the segments in [ap] than [am], as we would anticipate given the acoustic signatures of [m] (voiced, sonorant) versus [p] (voiceless, transient) (adult model: $\beta$=`r round(adult_msum$cond[7,1],4)*100`, z=`r round(adult_msum$cond[7,3],2)`, p<.001; child model: $\beta$=`r round(child_msum$cond[7,1],4)*100`, z=`r round(child_msum$cond[7,3],2)`, p<.001). 
 
+A positive coefficient for **Sequence duration** indicates that longer duration VC sequences tend to be less coarticulated (greater spectral distance between phones) (child model: $\beta$=`r round(child_msum$cond[5,1],4)*100`, z=`r round(child_msum$cond[5,3],2)`, p<.001; adult model: $\beta$=`r round(adult_msum$cond[5,1],4)*100`, z=`r round(adult_msum$cond[5,3],2)`, p<.001). The coefficients suggest that when speakers, both adults and children alike, speak slower, they tend to coarticulate less. There is, however, an interaction between several of these predictors, which will demonstrate that children in particular do not always coarticulate less in longer-duration sequences. The direction of the interaction between **Sequence duration**, **VC sequence**, and **Environment** differs between the adult and child speakers so this will be interpreted separately for the two groups in the following section.
 
-In the adult and child models, a positive coefficient for the predictor **VC sequence**, with the reference level '[ap]', shows that there was greater spectral distance between the segments in [ap] than [am], as we would anticipate given the acoustic signatures of [m] (voiced, sonorant) versus [p] (voiceless, transient) (adult model: $\beta$=`r round(adult_msum$cond[4,1],4)*100`, z=`r round(adult_msum$cond[4,3],2)`, p<.001; child model: $\beta$=`r round(child_msum$cond[4,1],4)*100`, z=`r round(child_msum$cond[4,3],2)`, p<.001). 
-
-
-Also of note in both the adult and child models is the direction of the **Sequence duration** predictor: a positive coefficient for **Sequence duration** indicates that longer duration VC sequences tended to also be less coarticulated (greater spectral distance between phones) (child model: $\beta$=`r round(child_msum$cond[2,1],4)*100`, z=`r round(child_msum$cond[2,3],2)`, p=`r round(child_msum$cond[2,4],3)`; adult model: $\beta$=`r round(adult_msum$cond[2,1],4)*100`, z=`r round(adult_msum$cond[2,3],2)`, p<.001). The coefficients suggest that when speakers, both adults and children alike, speak slower, they tend to coarticulate less. There is, however, an interaction between several of these predictors, which will demonstrate that children in particular do not always coarticulate less in longer-duration sequences. The direction of the interaction between **Sequence duration**, **VC sequence**, and **Environment** differs between the adult and child speakers so this will be interpreted separately for the two groups in the following section.
+Finally, the parameter **Syllable Count** was significant for the adult and child models, though the effect differed by group. Children tended to coarticulate progressively more in longer words. Adults coarticulated differently by word size, but coarticulation did not increase in longer words. These unanticipated age differences will be explored in the following section of the results. 
 
 &nbsp;
 &nbsp;
@@ -466,8 +552,6 @@ ggplot(adult, aes(aX_duration*1000, euc_dist, color=Environment, fill=Environmen
 
 
 ```{r, child-int-plot, fig.cap='Coarticulation within VC sequence by sequence duration and morphological environment in all child speakers'}
-child <- df.final %>% filter(Binary_age=='child')
-                                     
 child$VC_sequence <- plyr::mapvalues(child$VC_sequence, from = c("am", "ap"), to = c("[am]", "[ap]"))
 
 ggplot(child, aes(aX_duration*1000, euc_dist, color=Environment, fill=Environment, linetype = Environment)) +
@@ -484,39 +568,35 @@ ggplot(child, aes(aX_duration*1000, euc_dist, color=Environment, fill=Environmen
         title = element_text(size=14, face='bold'))
 ```
 
-### Adults
+#### Adults
 
-For the adult model, the interaction between **Sequence duration**, **VC sequence**, and **Environment** suggests a difference in the relationship between the response variable - amount of coarticulation - and **Sequence duration** that differs by **Environment** and **VC sequence**. As Figure \@ref(fig:adult-int-plot) demonstrates, this difference by **Environment** is apparent in the steepness of the slope for the 'across morpheme' and 'within morpheme' conditions for [am] and [ap]. To quantify this difference for the sequence [am], the slopes of the two conditions were calculated. As the [am] panel in Figure \@ref(fig:adult-int-plot) suggests, the slope for the 'within morpheme' condition was steeper (2.14) than the slope for the 'across morpheme' condition (2.06),^[To reflect the data visualizations, these slopes were calculated on the beta coefficients before the coefficients were scaled by 100.] suggesting a different relationship between duration and coarticulation between the two word environments in adults. 
+For the adult model, the interaction between **Sequence duration**, **VC sequence**, and **Environment** suggests a difference in the relationship between the response variable---amount of coarticulation---and **Sequence duration** that differs by **Environment** and **VC sequence**. As Figure \@ref(fig:adult-int-plot) demonstrates, this difference by **Environment** is apparent in the steepness of the slope for the 'across morpheme' and 'within morpheme' conditions for [am] and [ap]. To quantify this difference for the sequence [am], the slopes of the two conditions were calculated. As the [am] panel in Figure \@ref(fig:adult-int-plot) suggests, the slope for the 'within morpheme' condition was steeper (2.14) than the slope for the 'across morpheme' condition (2.06),^[To reflect the data visualizations, these slopes were calculated on the beta coefficients before the coefficients were scaled by 100.] suggesting a different relationship between duration and coarticulation between the two word environments in adults. 
 
 Overall, the significance of the interaction **Sequence duration**, **VC sequence**, and **Environment** in adult speakers shows two important results: first, adults distinguish by word environment, both for [ap] versus [a#p] sequences and [am] versus [a#m] sequences. Second, complicating this finding, is the fact that adults distinguish between word environments differently depending upon the VC sequence. For [ap], though adults coarticulate roughly equally across and within morphemes, the relationship between duration and coarticulation (longer duration equates to less coarticulation) is stronger in the 'across morpheme' condition. For [am], adults also distinguish between the two morphological environments by the relationship of VC duration and coarticulatory degree, but the effect of condition is reversed: the relationship between duration and coarticulation is stronger for the 'within morpheme' condition. 
 
-Thus, returning to one part of the central research question - does adult coarticulation differ by word environment - we find that adults do coarticulate differently in the two word environments. However, despite these significant differences, there was nevertheless a positive relationship between duration and amount of coarticulation for all combinations of VC sequences and word environments. Adults consistently coarticulate less in longer-duration sequences. This result suggests that adult speakers may have one overarching articulatory plan for all environments and both VC sequences measured. The following section demonstrates how this relationship between duration and coarticulation may not be uniform between adults and children. 
+Thus, returning to one of the central research questions - does adult coarticulation differ by word environment - we find that adults do coarticulate differently in the two word environments. Despite the differences by word environment, there was still a positive relationship between duration and amount of coarticulation for all combinations of VC sequences and word environments. Adults consistently coarticulate less in longer-duration sequences. This result suggests that adult speakers may have one overarching articulatory plan for all environments and both VC sequences measured. The following section demonstrates how this relationship between duration and coarticulation may not be uniform between adults and children. 
 
-### Children 
+#### Children 
 
-Turning to the child model, the significant interaction of **Sequence duration**, **VC sequence**, and **Environment** suggests that children do not coarticulate similarly in longer-duration sequences for all combinations of **Environment** and **VC sequence** (Figure \@ref(fig:child-int-plot)). Specifically, for [ap] sequences that occur across morpheme boundaries, the negative slope indicates that children actually coarticulate _more_ in longer duration sequences. The positive slope for the within morpheme boundary condition suggests that children coarticulate less in longer-duration sequences, in line with all of the adult patterns. So, children coarticulate more between segments at morpheme boundaries in words inflected with the locative marker _-pi_ than between those same segments that occur within morphemes. 
+In the child model, the significant interaction of **Sequence duration**, **VC sequence**, and **Environment** suggests that children do not coarticulate similarly in longer-duration sequences for all combinations of **Environment** and **VC sequence** (Figure \@ref(fig:child-int-plot)). Specifically, for [ap] sequences that occur across morpheme boundaries, the negative slope indicates that children actually coarticulate _more_ in longer duration sequences. The positive slope for the within morpheme boundary condition suggests that children coarticulate less in longer-duration sequences, in line with all of the adult patterns. So, children coarticulate more between segments at morpheme boundaries in words inflected with the locative marker _-pi_ than between those same segments that occur within morphemes. 
 
 ```{r child-facet-ap, fig.cap='Coarticulation within [ap] by sequence duration, morphological environment, and age in child speakers'}
-#map
-child$Age <- plyr::mapvalues(child$Age, from = 
-                                       c("10", "4", "5", "6", "7", "8", "9", "adult"), 
+child$Age_text <- plyr::mapvalues(child$Age, from = 
+                                       c("10", "5", "6", "7", "8", "9"), 
                                      to=c("Ten-year-olds",
-                                          "4", 
                                           "Five-year-olds", 
                                           "Six-year-olds", 
                                           "Seven-year-olds", 
                                           "Eight-year-olds", 
-                                          "Nine-year-olds", 
-                                          "Adult"))
+                                          "Nine-year-olds"))
 # reorder
-child$Age <- factor(child$Age, levels = c("4", 
+child$Age_text <- factor(child$Age_text, levels = c( 
                                 "Five-year-olds", 
                                 "Six-year-olds", 
                                 "Seven-year-olds", 
                                 "Eight-year-olds", 
                                 "Nine-year-olds", 
-                                "Ten-year-olds",
-                                "Adult"))
+                                "Ten-year-olds"))
 
 childpi <- child %>% filter(VC_sequence=='[ap]')
 
@@ -524,7 +604,7 @@ ggplot(childpi, aes(aX_duration*1000, euc_dist, color=Environment, fill=Environm
  geom_point(size=.3, alpha=.4) +
  geom_smooth(method = "lm") +
  labs(x = "[ap] sequence Duration (ms)", y = "Mel spectral distance") +
-  facet_wrap(~Age) + 
+ facet_wrap(~Age_text) + 
  #ggtitle("Coarticulation within [ap] by \n sequence duration, morphological \n environment, and age in child speakers") + 
  ylim(1, 40) +
   xlim(80,550) +
@@ -534,8 +614,7 @@ ggplot(childpi, aes(aX_duration*1000, euc_dist, color=Environment, fill=Environm
         title = element_text(size=14, face='bold'))
 ```
 
-Note that this negative relationship between duration and coarticulation is counter to the positive relationship for every combination of VC sequence and word environment in adult speakers. Adults consistently coarticulate less in longer-duration sequences regardless of environment or VC sequence. The facet plot in Figure \@ref(fig:child-facet-ap) plots this relationship between duration and coarticulation for [ap] for each age group (5-10 years) to ensure a consistent pattern across the groups. (Again the predictor **Age Group**, with the levels 5, 6, 7, 8, 9, and 10 years, did not improve upon the child model fit.) All age groups show the same negative relationship: the longer the [ap] sequence, the more the children coarticulate between [a] and [p] in the across morpheme condition. 
-
+This negative relationship between duration and spectral distance is counter to the positive relationship for every combination of VC sequence and word environment in adult speakers. Adults consistently coarticulate less in longer-duration sequences regardless of environment or VC sequence. The facet plot in Figure \@ref(fig:child-facet-ap) plots this relationship between duration and coarticulation for [ap] for each age group (5-10 years) to ensure a consistent pattern. All age groups show the same negative relationship: the longer the [ap] sequence, the more the children coarticulate between [a] and [p] in the across morpheme condition. 
 
 ```{r, child-facet-am, fig.cap='Coarticulation within [am] by sequence duration, morphological environment, and age in child speakers'}
 childmang <- child %>% filter(VC_sequence=='[am]')
@@ -544,7 +623,7 @@ ggplot(childmang, aes(aX_duration*1000, euc_dist, color=Environment, fill=Enviro
  geom_point(size=.3, alpha=.4) +
  geom_smooth(method = "lm") +
  labs(x = "[am] sequence Duration (ms)", y = "Mel spectral distance") +
-  facet_wrap(~Age) + 
+  facet_wrap(~Age_text) + 
  #ggtitle("Coarticulation within [am] by \n sequence duration, morphological \n environment, and age in child speakers") + 
  ylim(1, 40) +
   xlim(80,550) +
@@ -554,64 +633,31 @@ ggplot(childmang, aes(aX_duration*1000, euc_dist, color=Environment, fill=Enviro
         title = element_text(size=14, face='bold'))
 ```
 
-The results for [am] in children demonstrate broadly similar results to the adult speakers: children coarticulate less between segments in longer-duration [am] sequences. The facet plot in Figure \@ref(fig:child-facet-am) once again shows a similar effect for each age group. Given the between-subject variability that typically characterizes child speech, these patterns by environment are further broken apart by individual child for each age group (age 5-10) (Appendix B) to ensure no large outliers with regards to the patterning by word environment. The results by are broadly similar across speakers. 
+The results for [am] in children demonstrate broadly similar results to the adult speakers: children coarticulate less between segments in longer-duration [am] sequences. The facet plot in Figure \@ref(fig:child-facet-am) once again shows a similar effect for each age group. Given the between-subject variability that typically characterizes child speech, these patterns by environment are further broken apart by individual child for each age group (age 5-10) (Appendix I) to ensure no large outliers with regards to the patterning by word environment. The results by are broadly similar across speakers. 
 
+In sum, modeling results suggest that morphological structure is reflected in the speech of adults and children. However, the structure manifests in different ways between the two groups. Adults have a single plan for both environments, and even both VC sequences: adults coarticulate less in longer-duration sequences. For the most part, children show a similar duration-coarticulation relationship. The stark difference between adults and children emerges in the [ap] sequence patterning. Children differentiate between morphological environments via the relationship between duration and coarticulation as they coarticulate more in longer-duration sequences across morpheme boundaries and coarticulate _less_ in longer-duration sequences within morphemes. For words inflected with _-man_, children show a similar pattern to adults, though children do not differentiate by environment coarticulatorily. Rather, across morpheme sequences are shorter in duration than within morpheme sequences for the children. 
 
 &nbsp;
 &nbsp;
 
+## Compensatory shortening {#compensatory-shortening}
 
+One finding that emerged from the modeling in the previous section was a different effect of word length on coarticulation between the adults and children. The degree of children's coarticulation tended to progressively increase in words with more syllables; no such pattern was apparent for the adults. 
 
-## Interim discussion
+An exploratory analysis was conducted to explain the different relationship between coarticulation and word length for adults and children. This analysis asks, does the direction of the relationship between word length and coarticulation also hold for duration? Since coarticulation and duration are negatively correlated, this analysis predicts that duration would decrease as a function of the number of syllables in a word for the children. As such, the children's productions would reflect the phenomenon of <span style="font-variant:small-caps;">Compensatory Shortening</span> (also known as polysyllabic shortening), or the tendency for segment durations to shorten in longer-duration and/or polysyllabic words (Harrington et al., 2015; Lehiste 1972; Munhall et al., 1992).
 
-Comparing between the adult and child models, several preliminary conclusions can be made. First, responding to the original research question - do adults and children coarticulate differently within versus between morpheme boundaries - we find that both adults and children differentiate by morphological environment. However, they do so in different ways. Adults have a single plan for both environments, and even both VC sequences: adults coarticulate less in longer-duration sequences, and overall, they coarticulate less between [a] and [p] within morphemes than across morpheme boundaries. The stark difference between adults and children emerges in the [ap] sequence patterning. Children differentiate between morphological environments via the relationship between duration and coarticulation as they coarticulate more in longer-duration sequences across morpheme boundaries and coarticulate _less_ in longer-duration sequences within morphemes. 
+An effect of word length upon duration was predicted for the adults as well. However, just as it was found that coarticulation did not increase as a function of word length in the adult model, it is anticipated that adults likewise will not compensate durationally for longer words. As a result, the children, but not the adults, would exhibit compensatory shortening during their word production. 
 
-For words inflected with _-man_, children show a similar pattern to adults, though children do not differentiate by environment coarticulatorily. Rather, across morpheme sequences are shorter in duration than within morpheme sequences for the children. On the basis of these results, two questions remain. First, why do children differentiate between environments via a combination of duration and coarticulation; specifically, why do children produce shorter duration VC sequences across morpheme boundaries and longer duration sequences within morphemes? Second, why do children coarticulate more in longer-duration [ap] sequences that cross morpheme boundaries (e.g. _llama-pi_ 'llama-<span style="font-variant:small-caps;">loc</span>')? All of the other combinations of morphological environment and VC sequence in the adults and children suggest that the speakers coarticulate less in longer-duration segments. 
-
-The finding that children produce shorter-duration VC sequences in the 'across morpheme' condition than the 'within morpheme' condition for [am] and [ap] could be explained by a confound in word size and morphological environment. Coarticulation for the 'across morpheme' condition was, necessarily, measured across morphemes. However, to derive an across morpheme environment in Quechua, nouns are inflected with suffixes (e.g. _llama_ 'llama' -> _llama-pi_ 'llama-<span style="font-variant:small-caps;">loc</span>'). As a result, almost all of the stimuli in the 'across morpheme' condition are at least one syllable longer in length than the stimuli for the 'within morpheme' condition. For example, coarticulation between [ap] was frequently measured within two syllable base roots (e.g. _llapa_ 'lightening' and _llama_ 'llama'). However, for the 'across morpheme' condition, [ap] coarticulation was frequently measured in three-syllable inflections of these nouns (e.g. _llapa-pi_ 'lightening-LOC' and _llama-pi_ 'llama-<span style="font-variant:small-caps;">loc</span>'). Even for prosodically longer words where within morpheme coarticulation was measured, such as the three-syllable _hampiri_ 'healer' and _hatun mama_ 'grandmother', there were equivalent across morpheme stimuli that were one syllable longer (e.g. _hatun mama-mang_ 'grandmother-<span style="font-variant:small-caps;">all</span>'). 
-
-## Compensatory shortening
-
-To explore the possibility that durational differences between the 'across morpheme' and 'within morpheme' conditions could be due to word length, an exploratory analysis was conducted. We anticipated that sequence duration would shorten in words with more syllables, regardless of morphological context. This well-known tendency for segment durations to shorten in longer-duration/polysyllabic words is known as <span style="font-variant:small-caps;">Compensatory Shortening</span> (Harrington et al., 2015; Lehiste 1972; Munhall et al., 1992). To illustrate how this unfolds in the children's speech production for the current study, Figure \@ref(fig:compshort-kids) plots VC sequence duration by the number of syllables for the children and Figure \@ref(fig:compshort-adults) plots duration as a function of number of syllables for the adults. As the children's figure demonstrates, children's VC sequences are consistently shorter in words with more syllables, most notably between two- and three-syllable words. The same pattern is not apparent in the adult data: adults have fairly similar sequence lengths regardless of the number of syllables in the word (see Table \@ref(tab:dur-by-syll-kids) for descriptive statistics of duration by word length in syllables for the children and Table \@ref(tab:dur-by-syll-adults) for duration by word length results for the adults). 
-
-```{r, create syllable count for children}
-child$syllable_count <- child$new_word
-child$syllable_count <- factor(child$syllable_count)
-levels(child$syllable_count) <- list("2"=c("mama", "thapa",'pampa', 'q\'apa', 'llapa', 'thapa','llama','api','papa'), 
-      "3"=c("t\'ika-pi", "wallpa-pi", 'waka-pi', 'wawa-pi', 'sunkha-pi', 'chita-pi', 'cuca-pi', 'llama-pi_across','mama-pi_across','papa-pi_across', 'llapa-pi', 'llama-pi_within', 'mama-pi_within', 'papa-pi_within',  'llapa-pi_within', 'thapa-pi_within', 'pampa-pi_within', 'q\'apa-pi_within', 'papa-pi', 'llama-pi', 'mama-pi', 'thapa-pi', 'pampa-pi', 'llapa-pi_across', 'thapa-pi_across', 'pampa-pi_across','wawa-mang','chita-mang', 'q\'apa-mang', 'q\'apa-pi', 'thapa-mang', 'pampa-mang', 'mama-mang', 'wallpa-mang', 'waka-mang', 'sunkha-mang', 'cuca-mang', 'llapa-mang', 't\'ika-mang', 'papa-mang', 'llama-mang', 'api-pi', 'hampiri'), 
-      "4"=c("imilla-pi", "juk\'ucha-pi",'uhut\'a-pi','hatunmama-pi_within','juk\'ucha-mang','imilla-mang','hampiri-pi','hatunmama'), 
-      "5"=c( 'hatunmama-pi_across', 'q\'apa-pi_across', 'hatunmama-mang', 'hatunmama-pi'))
-
-
-child$Environment <- plyr::mapvalues(child$Environment, from = c("across morpheme", "within morpheme"), to=c("across", "within"))
-```
-
-```{r, create syllable count for adults}
-adult$syllable_count <- adult$new_word
-adult$syllable_count <- factor(adult$syllable_count)
-levels(adult$syllable_count) <- list("2"=c("mama", "thapa",'pampa', 'q\'apa', 'llapa', 'thapa','llama','api','papa',
-                                            'pampa-pi_within', 'llama-pi', 'mama-pi_within', 'llapa-pi_within',
-                                           'llama-pi_within', 'q\'apa-pi_within',   'papa-pi_within', 'thapa-pi_within'), 
-      "3"=c("t\'ika-pi", "wallpa-pi", 'waka-pi', 'wawa-pi', 'sunkha-pi', 'chita-pi', 'cuca-pi',  'llama-pi_across','mama-pi_across','papa-pi_across', 'llapa-pi', 'papa-pi','mama-pi', 'thapa-pi', 'pampa-pi', 'llapa-pi_across', 'thapa-pi_across', 'pampa-pi_across','wawa-mang','chita-mang', 'q\'apa-mang', 'q\'apa-pi', 'thapa-mang', 'pampa-mang', 'mama-mang', 'wallpa-mang', 'waka-mang', 'sunkha-mang', 'cuca-mang', 'llapa-mang', 't\'ika-mang', 'papa-mang', 'llama-mang', 'api-pi', 'hampiri'), 
-      "4"=c("imilla-pi", "juk\'ucha-pi",'uhut\'a-pi','hatunmama-pi_within','juk\'ucha-mang','imilla-mang','hampiri-pi','hatunmama'), 
-      "5"=c( 'hatunmama-pi_across', 'q\'apa-pi_across', 'hatunmama-mang', 'hatunmama-pi'))
-
-
-adult$Environment <- plyr::mapvalues(adult$Environment, from = c("across morpheme", "within morpheme"), to=c("across", "within"))
-
-```
-
-
-```{r, compshort-kids, fig.cap='Sequence duration by word length and word environment: Children'}
+```{r, compshort-kids, fig.cap='Sequence duration by word length and word environment: Children', eval=FALSE}
 ggplot(child, aes(x = syllable_count, y = aX_duration*1000, fill=Environment)) +
-  geom_violin(outlier.alpha = 0.1, color="grey25", alpha=.9, width=.9, draw_quantiles = c(0.5)) +  # mid quantile=median
+  geom_violin(color="grey25", alpha=.9, width=.9, draw_quantiles = c(0.5)) +  # mid quantile=median
   guides(fill = guide_legend(title = "Environment")) +
   scale_fill_manual(values=c("orangered4", "goldenrod3")) + 
   labs(y = "VC duration (ms)", x = "# of syllables in word") +
   #theme(legend.position = c(0.95, 0.33)) +
   theme(legend.text=element_text(size=9)) +
   theme(plot.title = element_text(size = 18, face = "bold")) +
-  facet_wrap(~Age, nrow=2) + 
+  facet_wrap(~Age_text) + 
   theme(legend.title = element_text(size=10, face='bold'),
         strip.text = element_text(size=8, face="bold"),
     axis.text = element_text(face = "bold", size = 12),
@@ -622,7 +668,7 @@ ggplot(child, aes(x = syllable_count, y = aX_duration*1000, fill=Environment)) +
 
 ```{r, compshort-adults, fig.cap='Sequence duration by word length and word environment: Adults'}
 ggplot(adult, aes(x = syllable_count, y = aX_duration*1000, fill=Environment)) +
-  geom_violin(outlier.alpha = 0.1, color="grey25", alpha=.9, width=.9, draw_quantiles = c(0.5)) +  # mid quantile=median
+  geom_violin(color="grey25", alpha=.9, width=.9, draw_quantiles = c(0.5)) +  # mid quantile=median
   guides(fill = guide_legend(title = "Environment")) +
   scale_fill_manual(values=c("orangered4", "goldenrod3")) + 
   labs(y = "VC duration (ms)", x = "# of syllables in word") +
@@ -638,7 +684,7 @@ ggplot(adult, aes(x = syllable_count, y = aX_duration*1000, fill=Environment)) +
     scale_x_discrete(expand=c(0.3,0.3)) # reduce space between violins
 ```
 
-```{r create dur-by-syll table for children, include=FALSE}
+```{r, create dur-by-syll table for children, include=FALSE}
 # calculate mean sequence_dur by VC_sequence and # of syllables and put in tables 
 
 mean_seq_dur <- child %>%
@@ -662,13 +708,7 @@ colnames(mean_seq_dur_table) <- c("Syllables","Duration (ms)", "SD ", "Duration 
 child.dur.tbl <- data.table::setDT(mean_seq_dur_table)
 ```
 
-```{r dur-by-syll-kids}
-knitr::kable(child.dur.tbl, caption = 'Mean VC sequence duration by number of syllables in word for children', booktabs=T) %>% 
-  kable_styling() %>% 
-  add_header_above(c(" " = 1, "[am]" = 2, "[ap]" = 2))
-```
-
-```{r create dur-by-syll table for adults, include=FALSE}
+```{r, create dur-by-syll table for adults, include=FALSE}
 # calculate mean sequence_dur by VC_sequence and # of syllables and put in tables 
 
 mean_seq_dur_adult <- adult %>%
@@ -692,74 +732,115 @@ colnames(mean_seq_dur_table_adult) <- c("Syllables","Duration (ms)", "SD ", "Dur
 adult.dur.tbl <- data.table::setDT(mean_seq_dur_table_adult)
 ```
 
-```{r dur-by-syll-adults}
-knitr::kable(adult.dur.tbl, caption = 'Mean VC sequence duration by number of syllables in word for adults', booktabs=T) %>% 
-  kable_styling() %>% 
-  add_header_above(c(" " = 1, "[am]" = 2, "[ap]" = 2))
-```
-
 ```{r child-dur-model, include=FALSE}
-summary(basedur <- lmer(aX_duration*1000 ~ 
-                  (1 | Speaker) + 
-                  (1 | Word), 
-                data=child))
+#summary(basedur <- lmer(aX_duration*1000 ~ 
+#                  (1 | Speaker:Word), 
+#                data=child))
 
-summary(durm1 <- lmer(aX_duration*1000 ~ 
-                 Age + 
-                  (1 | Speaker) + 
-                  (1 | Word), 
-                data=child))
-anova(basedur, durm1) # doesn't improve
+##summary(durm1 <- lmer(aX_duration*1000 ~ 
+ #                Age + 
+#                  (1 | Speaker:Word), 
+  #              data=child))
+#anova(basedur, durm1) # improves
 
-summary(durm2 <- lmer(aX_duration*1000 ~ 
+#summary(durm2 <- lmer(aX_duration*1000 ~ 
+#                  Age +
+#                  syllable_count + 
+#                  (1 | Speaker:Word), 
+#                data=child))
+#anova(durm1, durm2) # improves
+
+contrasts(child$syllable_count) <- contr.wec(child$syllable_count, "5") # weighted (sample) mean
+contrasts(child$Age) <- contr.wec(child$Age, "5") # weighted (sample) mean
+summary(durm3 <- lme4::lmer(aX_duration*1000 ~ 
+                  Age +
+                  VC_sequence + 
                   syllable_count + 
-                  (1 | Speaker) + 
-                  (1 | Word), 
+                  (1 | Speaker:Word), 
                 data=child))
-anova(basedur, durm2) # improves
-
-summary(durm3 <- lmer(aX_duration*1000 ~ 
-                  Environment + 
-                  syllable_count + 
-                  (1 | Speaker) + 
-                  (1 | Word), 
-                data=child))
-anova(durm2, durm3) # doesn't improve
+#anova(durm2, durm3) # improves; FINAL MODEL
 
 summary(durm4 <- lmer(aX_duration*1000 ~ 
-                  Environment*syllable_count + 
-                  (1 | Speaker) + 
-                  (1 | Word), 
-                data=child))
-anova(durm3, durm4) # doesn't improve
-
-summary(durm5 <- lmer(aX_duration*1000 ~ 
+                  Age +
+                  VC_sequence +   
+                  Environment +
                   syllable_count + 
-                    VC_sequence + 
-                  (1 | Speaker) + 
-                  (1 | Word), 
+                  (1 | Speaker:Word), 
+                  data=child))
+anova(durm3, durm4) # environment doesn't improve
+
+# relevel to get coefs for '5 syllable'
+contrasts(child$syllable_count) <- contr.wec(child$syllable_count, "4") # weighted (sample) mean
+
+# refit final model
+summary(durm3b <- lmer(aX_duration*1000 ~ 
+                  Age +
+                  VC_sequence + 
+                  syllable_count + 
+                  (1 | Speaker:Word), 
                 data=child))
-anova(durm2, durm5) # improves
 ```
 
-```{r, dursum, results='asis'}
+```{r adult-dur-model, include=FALSE}
+#summary(basedur_adult <- lmer(aX_duration*1000 ~ 
+#                  (1 | Speaker:Word), 
+#                  data=adult))
+
+summary(durm2_adult <- lmer(aX_duration*1000 ~ 
+                  VC_sequence + 
+                  (1 | Speaker:Word), 
+                  data=adult))
+#anova(basedur_adult, durm2_adult) # improves
+
+contrasts(adult$syllable_count) <- contr.wec(adult$syllable_count, "5") # weighted (sample) mean
+summary(durm3_adult <- lme4::lmer(aX_duration*1000 ~ 
+                  VC_sequence + 
+                  syllable_count + 
+                  (1 | Speaker:Word), 
+                  data=adult))
+adult_dur <- anova(durm2_adult, durm3_adult) # marginally improves bc only one level significant; FINAL MODEL
+
+#summary(durm4_adult <- lmer(aX_duration*1000 ~ 
+#                  VC_sequence +   
+#                  Environment +
+#                  syllable_count + 
+#                  (1 | Speaker:Word), 
+#                data=adult))
+#anova(durm3_adult, durm4_adult) # environment doesn't improve
+
+# relevel to get coefs for '5 syllable'
+contrasts(adult$syllable_count) <- contr.wec(adult$syllable_count, "4") # weighted (sample) mean
+# refit final model
+summary(durm3b_adult <- lmer(aX_duration*1000 ~ 
+                  VC_sequence + 
+                  syllable_count + 
+                  (1 | Speaker:Word), 
+                  data=adult))
+```
+
+```{r, childdursum, results='asis'}
 # I can put in all models attempted (make first argument vector containing model sums) later if desired.
-stargazer(durm5, header=FALSE, dep.var.caption = "", dep.var.labels.include = FALSE,  type = "latex", star.cutoffs=c(0.05,0.01,0.001), title="Model predicting VC duration: children",  digits = 2, ci = TRUE, order=c(5,1,2,3,4), covariate.labels = c("Intercept", "Three syllables", "Four syllables", "Five syllables", "VC sequence:[ap]"))
+stargazer(durm3, header=FALSE, dep.var.caption = "", dep.var.labels.include = FALSE,  type = "latex", star.cutoffs=c(0.05,0.01,0.001), title="Model predicting VC duration: children",  digits = 2, ci = TRUE, order=c(10,2,3,4,5,1,6,7,8,9), covariate.labels = c("Intercept", "Age:6", "Age:7", "Age:8", "Age:9", "Age:10",  "VC sequence:[ap]", "Two syllables", "Three syllables", "Four syllables"))
 ```
 
+```{r, adultdursum, results='asis'}
+# I can put in all models attempted (make first argument vector containing model sums) later if desired.
+stargazer(durm3_adult, header=FALSE, dep.var.caption = "", dep.var.labels.include = FALSE,  type = "latex", star.cutoffs=c(0.05,0.01,0.001), title="Model predicting VC duration: adults",  digits = 2, ci = TRUE, order=c(5,1,2,3,4), covariate.labels = c("Intercept", "VC sequence:[ap]", "Two syllables", "Three syllables", "Four syllables"))
+```
 
-To further explore the phenomenon of Compensatory Shortening in the children's speech, a linear mixed effects model was fit to predict the VC sequence duration in the children's speech (no skewed/non-negative predictors were included in the modelling so GLMMs were not necessary). Model fitting occurred as before in a forward-testing manner: the base model contained random effects of individual **Child** and **Word** (random slopes of Speaker by Word did not converge). Then, parameters were added in the following order: **Age** (5-10), **Number of Syllables** (2-5), **Environment** (across versus within), the interaction of **Number of Syllables** and **Environment**, and **VC sequence**. Only the predictors **Number of Syllables** and **VC sequence** improved baseline model fit (see Table \@ref(tab:dursum) for model summary). 
+To test the effect of word length (in syllables) upon duration, two linear mixed effects models (adult and child) were fit to predict VC sequence duration (no skewed or non-negative predictors were included in the modeling so GLMMs were not necessary). Model fitting occurred as before in a forward-testing manner: the base model contained random slopes of individual **Speaker** by **Word**. Then, parameters were added in the following order: **Age Group** (fit with weighted effect coding; only included in the child model), **VC sequence**, **Number of Syllables** (2-5), and **Environment** (across versus within). Only the predictors **Number of Syllables**, **Age Group**, and **VC sequence** improved baseline model fit (see Table XXX for the child model summary and Table XXX for the adult model summary; see Appendices G and H for tables with descriptive statistics of duration by age and number of syllables). 
 
-In the model summary, the positive beta coefficient for VC sequence with a reference level [am] indicates that the [ap] sequence was significantly longer than [am] sequences (as previous models demonstrated). Next, the negative beta coefficients for **Syllable Count** with a reference level of '2 syllables' indicated that VC sequence duration was approximately `r abs(round(summary(durm5)$coefficients[2,1],0))` ms shorter in three syllable words than two syllable ($\beta$=`r round(summary(durm5)$coefficients[2,1],2)`, t=`r round(summary(durm5)$coefficients[2,3],2)`, p<.001). Similarly, VC sequences were approximately `r abs(round(summary(durm5)$coefficients[3,1],0))` ms shorter in four syllable words than two syllable ($\beta$=`r round(summary(durm5)$coefficients[3,1],2)`, t=`r round(summary(durm5)$coefficients[3,3],2)`, p<.001) and `r abs(round(summary(durm5)$coefficients[4,1],0))` ms shorter in five syllable words than two syllable words ($\beta$=`r round(summary(durm5)$coefficients[4,1],2)`, t=`r round(summary(durm5)$coefficients[4,3],2)`, p<.001). The insignificance of **Environment** and child **Age** for the modelling suggests that that this relationship between duration and word length is independent of morphological environment and child age. 
+In both model summaries, the positive beta coefficients for VC sequence indicate that the [ap] sequence was significantly longer than the [am] sequence (as previous models demonstrated). The insignificance of **Environment** suggests that that the relationship between duration and word length is independent of word environment. The patterns by child age again demonstrate how older children speak faster than younger. Negative coefficients for the nine- and ten-year old children indicate that those children's VC sequences were approximately `r abs(round(summary(durm3)$coefficients[6,1],0))` ms and `r abs(round(summary(durm3)$coefficients[2,1],0))` ms shorter, respectively, than the weighted age group mean. 
 
-As these coefficients demonstrate, VC sequence decreases in larger words, with the largest differences between two- and three-syllable words. The diverse stimuli in the two- and three-syllable conditions (many different word types) suggest that this relationship by word length is relatively robust. 
+The primary parameter of interest is **Syllable Count**. In the child model, the positive coefficient for '2 syllable' stimuli indicates that VC sequence duration in two syllable words was approximately `r round(summary(durm3)$coefficients[8,1],0)` ms longer than the weighted mean word length. The negative coefficients for the '3 syllable' ($\beta$=`r round(summary(durm3)$coefficients[9,1],2)`), '4 syllable' ($\beta$=`r round(summary(durm3)$coefficients[10,1],2)`) and '5 syllable' ($\beta$=`r round(summary(durm3b)$coefficients[10,1],2)`; not presented in model summary) stimuli indicate that VC sequences tend to become shorter in longer words. The diverse stimuli in the two- and three-syllable conditions in particular (many different word types) suggest that this relationship by word length is relatively robust for the children.^[The only exception to the tendency to shorten sequences in larger words was that [ap] sequences are slightly longer in duration in 5-syllable words than 4-syllable words. However, in this exploratory analysis, the differences between the four and five syllable words were not tightly controlled: there were only two different five-syllable word stimuli: _hatun mama-man_ 'grandmother-<span style="font-variant:small-caps;">all</span>'' and _hatun mama-pi_ 'grandmother-<span style="font-variant:small-caps;">loc</span>'. We can only speculate that this relationship between sequence duration and number of syllables is strictly linear and would generalize to additional words with more syllables for the children.] 
+ 
+For the adult model, a model with **Syllable Count** only marginally improved over one without ($\chi$^2^ = `r round(adult_dur$Chisq[2],2)`, df=`r adult_dur$npar[1]`,`r adult_dur$npar[2]`, p=.08). Furthermore, only one level of **Syllable Count**, the three syllable stimuli, significantly predicted sequence duration. This result suggests that 1) word length was not strongly predictive of sequence duration in the adults and 2) adults did not compensate for word length by shortening syllable durations in longer words.
 
-The only exception to the tendency to shorten sequences in larger words was that [ap] sequences are slightly longer in duration in 5-syllable words than 4-syllable words. However, in this exploratory analysis, the differences between the four and five syllable words were not tightly controlled: there were only two different five-syllable word stimuli: _hatun mama-man_ 'grandmother-<span style="font-variant:small-caps;">all</span>'' and _hatun mama-pi_ 'grandmother-<span style="font-variant:small-caps;">loc</span>'. We can only speculate that this relationship between sequence duration and number of syllables is strictly linear and would generalize to additional words with more syllables. 
-
-In conclusion, on the basis of this modeling, it is proposed that children may differentiate by morphological environment in their speech production. However, in Quechua, morphological structure is crossed with prosodic structure: complex words are always structurally longer than base forms. Regardless, children distinguish between morphological/prosodic environments primarily via the acoustic cue of _duration_: in child Quechua, the duration of sequences is shorter in words with more syllables (Compensatory Shortening). This duration pattern by word length was not present in the adult speech, a finding that is explored in the Discussion. 
+In sum, children appear to compensate for word length in their speech production via coarticulation and duration. Word length is also reflected in the adults' speech patterns, but not in any linear direction that suggests compensatory shortening. Causes behind these age differences are proposed in the Discussion.  
 
 # Appendices
 
+## Appendix E
 ```{r adult-child model sum}
 adult.chi <- rbind(broom.mixed::tidy(all_m5, 
                                  effects = c("fixed"), 
@@ -768,37 +849,43 @@ adult.chi <- rbind(broom.mixed::tidy(all_m5,
 
 adult.chi$term <- plyr::mapvalues(adult.chi$term, 
                                      from = c("(Intercept)", 
+                                              "syllable_count2",
+                                              "syllable_count3",
+                                              "syllable_count4",
                                               "Sequence_duration_scaled", 
                                               "VC_sequenceap", 
-                                              "Binary_ageadult",
+                                              "Binary_agechild",
                                               "Environmentacross morpheme",
                                               "Sequence_duration_scaled:VC_sequenceap",
-                                              "Sequence_duration_scaled:Binary_ageadult",
-                                              "VC_sequenceap:Binary_ageadult",
+                                              "Sequence_duration_scaled:Binary_agechild",
+                                              "VC_sequenceap:Binary_agechild",
                                               "Sequence_duration_scaled:Environmentacross morpheme",
                                               "VC_sequenceap:Environmentacross morpheme",
-                                              "Binary_ageadult:Environmentacross morpheme",
-                                              "Sequence_duration_scaled:VC_sequenceap:Binary_ageadult",
-                                              "Sequence_duration_scaled:VC_sequenceap:Environmentacross morpheme ",                                              "Sequence_duration_scaled:Binary_ageadult:Environmentacross morpheme",
-                                              "VC_sequenceap:Binary_ageadult:Environmentacross morpheme",
-                                              "Sequence_duration_scaled:VC_sequenceap:Binary_ageadult:Environmentacross morpheme"
+                                              "Binary_agechild:Environmentacross morpheme",
+                                              "Sequence_duration_scaled:VC_sequenceap:Binary_agechild",
+                                              "Sequence_duration_scaled:VC_sequenceap:Environmentacross morpheme",                                                                      "Sequence_duration_scaled:Binary_agechild:Environmentacross morpheme",
+                                              "VC_sequenceap:Binary_agechild:Environmentacross morpheme",
+                                              "Sequence_duration_scaled:VC_sequenceap:Binary_agechild:Environmentacross morpheme"
                                         ), 
                                      to = c("Intercept", 
-                                            "VC_sequence:ap", 
-                                            "Age:adult", 
+                                            "Syllable count:2",
+                                            "Syllable count:3",
+                                            "Syllable count:4",
+                                            "Sequence duration",
+                                            "VC sequence:ap", 
+                                            "Age:child", 
                                             "Environment:across morpheme", 
-                                            "Sequence_duration*VC sequence:ap", 
-                                            "Sequence_duration*VC sequence:ap", 
-                                            "Sequence_duration*Age:adult", 
-                                            "VC sequence:ap*Age:adult", 
-                                            "Sequence_duration*Environment:across morpheme", 
+                                            "Sequence duration*VC sequence:ap", 
+                                            "Sequence duration*Age:child", 
+                                            "VC sequence:ap*Age:child", 
+                                            "Sequence duration*Environment:across morpheme", 
                                             "VC sequence:ap*Environment:across morpheme",
-                                            "Age:adult*Environment:across morpheme", 
-                                            "Sequence_duration*VC sequence:ap*Age:adult", 
-                                            "Sequence_duration*VC sequence:ap*Environment:across morpheme",
-                                            "Sequence_duration*Age:adult*Environment:across morpheme", 
-                                            "VC sequence:ap*Age:adult*Environment:across morpheme",
-                                            "Sequence_duration*VC sequence:ap*Age:adult*Environment:across morpheme"))
+                                            "Age:child*Environment:across morpheme", 
+                                            "Sequence duration*VC sequence:ap*Age:child", 
+                                            "Sequence duration*VC sequence:ap*Environment:across morpheme",
+                                            "Sequence duration*Age:child*Environment:across morpheme", 
+                                            "VC sequence:ap*Age:child*Environment:across morpheme",
+                                            "Sequence duration*VC sequence:ap*Age:child*Environment:across morpheme"))
 
 adult.chi$conf.high <- round(as.numeric(adult.chi$conf.high),2)
 adult.chi$conf.low <- round(as.numeric(adult.chi$conf.low),2)
@@ -811,11 +898,43 @@ adult.chi <- adult.chi %>% rename(
 adult.chi$'95% CI' <- as.factor(adult.chi$'95% CI')
 
 papaja::apa_table(adult.chi %>% 
+                  mutate(estimate = estimate*100) %>%
+                  mutate(S.E. = S.E.*100) %>%
                   select(c(-model)), 
                   caption="Model predicting coarticulation in children \n and adults") 
 ```
 
+## Appendix F
+```{r child-facet-ap-word, fig.cap='Coarticulation within [ap] by sequence duration, morphological environment, and word in child speakers'}
+ggplot(childpi, aes(aX_duration*1000, euc_dist, color=Environment, fill=Environment, linetype = Environment)) +
+ geom_point(size=.3, alpha=.4) +
+ geom_smooth(method = "lm") +
+ labs(x = "[ap] sequence Duration (ms)", y = "Mel spectral distance") +
+ facet_wrap(~Word) + 
+ #ggtitle("Coarticulation within [ap] by \n sequence duration, morphological \n environment, and age in child speakers") + 
+ ylim(1, 40) +
+  xlim(80,550) +
+    theme(strip.text.x = element_text(size = 8, face='bold')) +
+  theme(axis.text=element_text(size=6),
+          axis.title=element_text(size=14, face='bold'), 
+        title = element_text(size=14, face='bold'))
+```
 
+## Appendix G
+```{r dur-by-syll-kids}
+knitr::kable(child.dur.tbl, caption = 'Mean VC sequence duration by number of syllables in word for children', booktabs=T) %>% 
+  kable_styling() %>% 
+  add_header_above(c(" " = 1, "[am]" = 2, "[ap]" = 2))
+```
+
+## Appendix H
+```{r dur-by-syll-adults}
+knitr::kable(adult.dur.tbl, caption = 'Mean VC sequence duration by number of syllables in word for adults', booktabs=T) %>% 
+  kable_styling() %>% 
+  add_header_above(c(" " = 1, "[am]" = 2, "[ap]" = 2))
+```
+
+## Appendix I
 ```{r, five-facet-ap, fig.cap='Coarticulation by [ap] duration, word, and morphological environment in five-year-old children'}
 fiveap <- df.final %>%filter(Age=='5' & VC_sequence=='ap')
 fiveam <- df.final %>%filter(Age=='5' & VC_sequence!='ap')
@@ -866,7 +985,6 @@ ggplot(sixap, aes(aX_duration/Word_duration*1000, euc_dist, color=Environment, f
  ylim(0, 46) +
   xlim(8,890)
 ```
-
 
 ```{r six-facet-am, fig.cap='Coarticulation by [am] duration, word, and morphological environment in six-year-old children'}
 ggplot(sixam, aes(aX_duration/Word_duration*1000, euc_dist, color=Environment, fill=Environment)) +
@@ -944,7 +1062,6 @@ ggplot(nineam, aes(aX_duration/Word_duration*1000, euc_dist, color=Environment, 
  ylim(0, 46) +
   xlim(8,890)
 ```
-
 
 ```{r ten-facet-ap, fig.cap='Coarticulation by [ap] duration, word, and morphological environment in ten-year-old children'}
 ggplot(tenap, aes(aX_duration/Word_duration*1000, euc_dist, color=Environment, fill=Environment)) +

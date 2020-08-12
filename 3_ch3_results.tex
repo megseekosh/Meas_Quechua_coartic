@@ -26,7 +26,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-  pdftitle={Chapter 3 Results},
+  pdftitle={Quechua word structure results},
   pdfauthor={Meg Cychosz},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
@@ -73,9 +73,9 @@
 \usepackage{makecell}
 \usepackage{xcolor}
 
-\title{Chapter 3 Results}
+\title{Quechua word structure results}
 \author{Meg Cychosz}
-\date{12/15/2019}
+\date{8/11/2020}
 
 \begin{document}
 \maketitle
@@ -87,17 +87,17 @@
 \hypertarget{results}{%
 \section{Results}\label{results}}
 
-The primary research question in this experiment asks how child and adult Quechua speakers coarticulate between and within morphemes. The results begin with descriptive statistics concerning the amount of coarticulation by age group (children aged 5 through adults) and morphological environment (within versus between morphemes). Additional descriptive statistics outline the duration of the VC sequences by age group and morphological environment. Then, a series of models are fit to predict coarticulation and duration by age and morphological environment. These models are complemented by an analysis highlighting how coarticulation interacts with duration differently in adults and children in the two morphological environments.
+The primary research objective of this study is to measure the speech production patterns of child and adult Quechua speakers between and within morphemes. Results begin with descriptive statistics concerning the amount of coarticulation and VC sequence duration by age group and morphological environment (within versus between morphemes). Then, a series of models are fit to predict coarticulation and duration by age and morphological environment. These models are complemented by an analysis highlighting how coarticulation interacts with duration differently in adults and children in the two morphological environments.
 
-All analyses were conducted in the RStudio computing environment (version: 1.2.5019; rstudio, 2019). Data visualizations were created with \texttt{ggplot2} (Wickham, 2016). Modeling was conducted using the \texttt{lme4} (Bates et al., 2015), \texttt{lmerTest} (Kuznetsova et al., 2017), and \texttt{glmmTMB} (Brooks et al., 2017) packages and summaries were presented with \texttt{papaja} (Aust \& Barth, 2019) and \texttt{Stargazer} (Hlavac, 2018). Tests of residual normality were conducted using the \texttt{normtest} package (Gavrilov \& Pusev, 2014). The significance of potential model parameters was determined using a combination of log-likelihood comparisons between models, AIC estimations, and p-values procured from model summaries. In all models, continuous predictors were mean-centered to facilitate model interpretation.
+All analyses were conducted in the RStudio computing environment (version: 1.3.1056; rstudio, 2020). Data visualizations were created with \texttt{ggplot2} (Wickham, 2016). Modeling was conducted using the \texttt{lme4} (Bates et al., 2015), \texttt{lmerTest} (Kuznetsova et al., 2017), and \texttt{glmmTMB} (Brooks et al., 2017) packages and summaries were presented with \texttt{papaja} (Aust \& Barth, 2019) and \texttt{Stargazer} (Hlavac, 2018). Tests of residual normality were conducted using the \texttt{normtest} package (Gavrilov \& Pusev, 2014). The significance of potential model parameters was determined using a combination of log-likelihood comparisons between models, AIC estimations, and p-values procured from model summaries. In all models, continuous predictors were mean-centered to facilitate model interpretation.
 
-\hypertarget{descriptive-statistics}{%
-\subsection{Descriptive statistics}\label{descriptive-statistics}}
+\hypertarget{modeling-interaction-of-coarticulation-and-duration}{%
+\subsection{Modeling interaction of coarticulation and duration}\label{modeling-interaction-of-coarticulation-and-duration}}
 
 \hypertarget{coarticulation}{%
 \subsubsection{Coarticulation}\label{coarticulation}}
 
-The degree of coarticulation between the VC sequences {[}ap{]} and {[}am{]} was measured using the spectral distance metric described in experiment one For this coarticulation metric, coarticulation is quantified as the Euclidean distance between the spectral vectors of two adjacent phones, henceforth the Mel spectral distance. In this outcome measure, a larger spectral distance between phones equates to \emph{less} coarticulation between the phones.
+The degree of coarticulation between the VC sequences {[}ap{]} and {[}am{]} was measured using the spectral distance metric described in the Methods. For this metric, coarticulation is quantified as the Euclidean distance between the spectral vectors of two adjacent phones, henceforth the Mel spectral distance. A larger spectral distance between phones equates to \emph{less} coarticulation between the phones.
 
 \begin{table}
 
@@ -143,14 +143,16 @@ adult & 7.44 & 4.19 & 7.00 & 3.34\\
 \end{tabular}
 \end{table}
 
-Table \ref{tab:ap-coartic-tbl} shows the mean Mel spectral distance between the segments in {[}ap{]} (words inflected with \emph{-pi} for the across morpheme boundary condition) and Table \ref{tab:am-coartic-tbl} shows this for {[}am{]} (words inflected with \emph{-man} for the across morpheme boundary condition). Unsurprisingly, there is a larger average spectral distance between the vowel and plosive in {[}ap{]} than the vowel and nasal in {[}am{]} because the segments in {[}am{]} have increased acoustic similarity (sonority, voicing). Next, looking by age group for coarticulation between {[}ap{]}, it is apparent that the amount of coarticulation between segments increases as children age. This is likely due to the increased speaking rate in the older cohorts and adults, as will become apparent when these results are crossed with sequence duration. There is less within age group variability in {[}ap{]} productions in the adult speakers as well (reflected in the smaller SD of the mean for the adults). Variability does not appear to decrease linearly as both the nine and ten-year-old cohorts exhibit larger SDs than the five and six-year-olds. However, this could also reflect the smaller sample sizes in the older cohorts (5 ten-year-olds and 5 nine-year-olds but 10 each in the five- and six-year-old cohorts).
+Table \ref{tab:ap-coartic-tbl} shows the mean Mel spectral distance between the segments in {[}ap{]} (words inflected with \emph{-pi} for the across morpheme boundary condition) and Table \ref{tab:am-coartic-tbl} shows this for {[}am{]} (words inflected with \emph{-man} for the across morpheme boundary condition). Unsurprisingly, there is a larger average spectral distance between the vowel and plosive in {[}ap{]} than the vowel and nasal in {[}am{]} because the segments in {[}am{]} have increased acoustic similarity (sonority, voicing). Next, looking by age group for coarticulation between {[}ap{]} shows that the amount of coarticulation between segments increases as children age. This is likely due to the increased speaking rate in the older cohorts and adults, as will become apparent when these results are crossed with sequence duration. There is also a large amount of between-child variability, even within age group (see Appendices I for by-speaker plots). For example, the eight-year-old children appear to have the largest spectral distance between {[}a{]} and {[}p{]}, but the group SD is also highest.
 
-For the coarticulation patterns between segments in {[}am{]}, adults and children appear to coarticulate similarly, irrespective of age group. There is slightly greater variability in the amount of coarticulation (larger SD) in the adult group. Overall, the difference in developmental coarticulatory patterns between the VC sequence {[}am{]} and the sequence {[}ap{]} could be due to differences in the \emph{-man} suffix use in Quechua (frequency, productivity). Alternatively, differences between these sequences could be due to the acoustic differences between {[}ap{]} and {[}am{]} as segments in {[}am{]} are more acoustically similar than segments in {[}ap{]}.
+There is less within-group variability in {[}ap{]} productions in the adult speakers (reflected in the adults' smaller SD of the mean). Furthermore, variability does not appear to decrease linearly as both the nine and ten-year-old cohorts exhibit larger SDs than the five and six-year-olds. However, this could also reflect the smaller sample sizes in the older cohorts (5 ten-year-olds and 5 nine-year-olds but 10 each in the five- and six-year-old cohorts).
+
+For the coarticulation patterns between segments in {[}am{]}, adults and children coarticulate similarly, irrespective of age group. There is slightly greater variability in the amount of coarticulation (larger SD) in the adult group.
 
 \hypertarget{duration}{%
 \subsubsection{Duration}\label{duration}}
 
-We next turned to descriptive statistics describing the interaction of coarticulation and sequence duration. Duration could interact with coarticulation, and age, as speakers coarticulate more in fast speech (Gay, 1981), and adults speak faster than children (Lee et al., 1999).
+The following descriptive statistics outline the interaction of coarticulation and sequence duration. Duration interacts with coarticulation, and age, as speakers coarticulate more in fast speech (Gay, 1981), and adults speak faster than children (Lee et al., 1999).
 
 \begin{table}
 
@@ -196,24 +198,26 @@ adult & 175.6 & 36 & 173.7 & 39\\
 \end{tabular}
 \end{table}
 
-Table \ref{tab:ap-dur-tbl} maps average sequence duration of {[}ap{]} by age and word position and Table \ref{tab:am-dur-tbl} does similarly for {[}am{]}. Overall, duration of {[}ap{]} decreases with age, with adult speakers exhibiting the shortest average duration for {[}ap{]} for both word positions. Of note is that the average duration of {[}ap{]} sequences within morphemes tended to be longer than the duration of {[}ap{]} sequences across boundaries for all of the children. This pattern was reversed in the adult speakers, however, whose average {[}ap{]} duration within morpheme boundaries was actually \emph{shorter} than across. This pattern will be revisited in the modelling portion of the Results.
+Table \ref{tab:ap-dur-tbl} maps average sequence duration of {[}ap{]} by age and word position and Table \ref{tab:am-dur-tbl} does so for {[}am{]}. Duration of {[}ap{]} decreases with age, with adult speakers exhibiting the shortest average {[}ap{]} duration for both word positions. The average duration of {[}ap{]} sequences within morphemes tended to be longer than the duration of {[}ap{]} sequences across boundaries for all of the children. This pattern was reversed in the adult speakers whose average {[}ap{]} duration within morpheme boundaries was actually \emph{shorter} than across. The patterns by morphological environment will be revisited in the following section of the Results.
 
-Turning to the sequence {[}am{]}, the average duration of the {[}am{]} sequence in adult speakers was shorter than all of the child speakers; and like {[}ap{]}, {[}am{]} duration also appears to decrease with age. This pattern of {[}am{]} duration decreasing with age is consistent for both word positions, across and within morphemes.
+Turning to the sequence {[}am{]}, the average duration of {[}am{]} in adult speakers was shorter than all of the children; and like {[}ap{]}, {[}am{]} duration also decreases with age, across and within morphemes.
 
-Concerning differences by word position, all age groups showed, on average, shorter {[}am{]} durations in the across morpheme condition, contrary to the finding that {[}ap{]} sequence duration was longer in the across morpheme condition for adults. However, it is important to note the average duration of {[}am{]} by word position in adults only differed by approximately 3 ms while the average within morpheme condition in children was approximately 40 ms greater than the across morpheme condition in children. Thus, for both {[}am{]} and {[}ap{]} sequences, there appears to be a difference in sequence duration by word position for adult and child speakers. In the following section we turn to the modeling of coarticulation before illustrating how degree of coarticulation interacts with duration differently in the adults and children.
+Concerning differences by word position, all child age groups showed, on average, shorter {[}am{]} durations in the across morpheme condition, contrary to the finding that {[}ap{]} sequence duration was longer in the across morpheme condition for adults. However, the average duration of {[}am{]} by word position in adults only differed by approximately 2 ms while the average within morpheme condition in children was approximately 30 ms greater than the across morpheme condition. Thus, for both {[}am{]} and {[}ap{]} sequences, there appears to be a difference in sequence duration by word position for adult and child speakers. In the following section we turn to the modeling of coarticulation before illustrating how degree of coarticulation interacts with duration differently in the adults and children.
 
-\hypertarget{modelling-interaction-of-coarticulation-and-duration}{%
-\subsection{Modelling interaction of coarticulation and duration}\label{modelling-interaction-of-coarticulation-and-duration}}
+\hypertarget{modeling}{%
+\subsubsection{Modeling}\label{modeling}}
 
-The central research question in this study asked if child and adult Quechua speakers would coarticulate similarly between VC sequences across versus within morpheme boundaries. To answer this question, a series of generalized linear mixed effect models (GLMMs) were fit to predict degree of coarticulation (Mel spectral distance between each V and C). GLMMs were chosen instead of the more common linear mixed effect models due to the non-normality of the residual \textbf{VC Sequence duration} (henceforth simply \textbf{Sequence Duration}) which was included in all models. (Shapiro tests of kurtosis and skewness for \textbf{Sequence duration} indicated that we could reject the null hypothesis that the residual's distribution did not differ significantly from a normal distribution. Kurtosis t=5.53, p\textless.001 and skewness: t=1.07, p\textless.001 {[}Shapiro et al., 1968{]}.) Specifically, the response variable \textbf{Spectral distance} and the residual \textbf{Sequence duration} are both limited to non-negative values (as all VC sequences had some distance between the V and C and all had a duration), with a resultant right skew to the data distribution.
+A series of generalized linear mixed effect models (GLMMs) were fit to predict degree of coarticulation (Mel spectral distance between each V and C). GLMMs were chosen instead of the more common linear mixed effect models due to the non-normality of the residual \textbf{VC Sequence duration} (henceforth simply \textbf{Sequence Duration}) which was included in all models.\footnote{Shapiro tests of kurtosis and skewness for \textbf{Sequence duration} indicated that we could reject the null hypothesis that the residual's distribution did not differ significantly from a normal distribution. Kurtosis t=5.53, p\textless.001 and skewness: t=1.07, p\textless.001 (Shapiro et al., 1968).} Specifically, the response variable \textbf{Spectral distance} and the residual \textbf{Sequence duration} are both limited to non-negative values (as all VC sequences had some distance between the V and C and all had a duration), with a resultant right skew to the data distribution.
 
-The choice to fit gamma GLMMs, as opposed to log-normalizing \textbf{Sequence duration} and fitting linear mixed models, reflects recent suggestions in cognitive psychology to avoid data transformation, even for commonly-transformed variables such as time/duration, in an effort to facilitate between-study comparison (Lo \& Andrews, 2015). Consequently, gamma GLMMs were fit using a log linking function to appropriately model the skewed, non-Gaussian distribution of the residual.
+The choice to fit gamma GLMMs, as opposed to log-normalizing \textbf{Sequence duration} and fitting linear mixed models, reflects some recent suggestions in cognitive psychology to avoid data transformation, even for commonly-transformed variables such as time, duration, or response time, to facilitate between-study comparison (Liceralde, 2018; Lo \& Andrews, 2015). However, there is not yet a consensus in the literature on the use of transformed versus untransformed variables. Consequently, gamma GLMMs were fit using a log linking function to appropriately model the skewed, non-Gaussian distribution of the residual. Then, in a supplementary analysis, all modeling procedures were replicated with linear mixed effects models that included a transformed \textbf{Sequence duration} variable. Final model results were broadly consistent across the two modeling approaches; see Supplementary analysis for details.
 
-A GLMM was fit to predict the spectral distance between segments in the VC sequences. Baseline models included random effects of \textbf{Participant} and \textbf{Word} (models with random slopes of \textbf{Participant} by \textbf{Word} did not converge, possibly due to the number of repetitions per speaker; see Methods). Model building then began in a forward-testing manner with predictors added in the following order: \textbf{Sequence duration}, \textbf{VC sequence} ({[}ap{]} or {[}am{]}), \textbf{Age} (adult or child), \textbf{Environment} ({[}within morpheme or between morphemes{]}), and interactions. The best model fit included the four-variable interaction of \textbf{Sequence duration}, \textbf{VC sequence}, \textbf{Age}, and \textbf{Environment}. The summary for the model containing adults and children together is included in listed in Appendix D. This four-variable interaction indicates that the coarticulation and duration patterns differ between adults and children. Consequently, given the difficulty in interpreting four-variable interactions, separate models were fit for adults and children to facilitate coefficient interpretation.
+Baseline GLMMs included random slopes of \textbf{Participant} by \textbf{Word}. Model building then began in a forward-testing manner with predictors added in the following order: \textbf{Syllable Count} (fit with weighted effect coding for all models), \textbf{Sequence duration}, \textbf{VC sequence} ({[}ap{]} or {[}am{]}), \textbf{Age} (adult or child), \textbf{Environment} ({[}within morpheme or between morphemes{]}), and interactions. \textbf{Syllable Count} was included in the modeling in an attempt to isolate the effect of \textbf{Environment} on speech production from prosodic structure since within-morpheme stimulus items tended to be shorter than across-morpheme items (see Methods).\footnote{To further ensure that the difference by \textbf{Environment} was due to morphological structure, all models were additionally fit with the covariate \textbf{Word Duration} (in ms), instead of \textbf{Syllable Count} (models were not fit with both since \textbf{Word Duration} and \textbf{Syllable Count} are highly correlated). Results were broadly the same: the three-way interaction of \textbf{Sequence duration}, \textbf{VC sequence}, and \textbf{Environment} improved upon model fits controlling for \textbf{Word Duration} with the same direction of the effect. Like the models that control for prosodic structure with the covariate, \textbf{Syllable Count}, these models also suggest that the speech production differences by word environment were more likely morphological, not prosodic, in nature.}
 
-For both the adult and child groups, models were fit to predict the spectral distance between segments in the VC sequences. Best model fit for the adult and child models included the three-variable interaction of \textbf{Sequence duration}, \textbf{VC sequence}, and \textbf{Environment}: the improvement of models with this interaction over models with the three independent effects was significant for the adult model with alpha level \textless.05 (\(\chi\)\textsuperscript{2} = 12.69, df=7,11 p=.01) and the child model (\(\chi\)\textsuperscript{2} = 15.18, df=7,11, p=.004). Throughout the results, the children's patterns are additionally broken apart by age to view differences between age groups. However, note that in the child model, the addition of the variable \textbf{Age Group} (levels: 5, 6, 7, 8, 9, 10) did not improve upon a model with the interaction of \textbf{Sequence duration}, \textbf{VC sequence}, and \textbf{Environment}. This fact suggests that the pattern of coarticulation and duration by morphological environment did not significantly vary by the child's age group.
+The best model fit included \textbf{Syllable Count} and the four-variable interaction of \textbf{Sequence duration}, \textbf{VC sequence}, \textbf{Age}, and \textbf{Environment}. This four-variable interaction indicates that the relationship between coarticulation and duration differs between adults and children. Given the difficulty in interpreting four-variable interactions, separate models were fit for adults and children to facilitate coefficient interpretation. The summary for the model containing adults and children together is included in Appendix E.
 
-The final child model summary is listed in table \ref{tab:child-model-sum} and the adult model summary is listed in table \ref{tab:adult-model-sum}. Note that in the model summaries for the children and adults, the coefficients and standard error measurements were multiplied by 100 to make the otherwise small coefficients more interpretable. This step does not effect the direction or magnitude of the effect between predictors and outcome variables.
+Best model fit for the adult and child models included \textbf{Syllable Count} and the three-variable interaction of \textbf{Sequence duration}, \textbf{VC sequence}, and \textbf{Environment}: the improvement of models with this interaction over models with the four independent effects was significant for the adult model at alpha level \textless.05 (\(\chi\)\textsuperscript{2} = 11.18, df=9,13 p=.02) and the child model (\(\chi\)\textsuperscript{2} = 36.52, df=9,13, p\textless.001). The final adult model summary is listed in Table \ref{tab:adult-model-sum} and the child model summary is listed in Table \ref{tab:child-model-sum}.\footnote{In the model summaries for the children and adults, the coefficients and standard error measurements were multiplied by 100 to make the otherwise small coefficients more interpretable. This step does not effect the direction or magnitude of the effect between predictors and outcome variables.}
+
+For the child model, the addition of the variable \textbf{Age Group} (levels: 5, 6, 7, 8, 9, 10; fit with weighted effect coding) improved upon a model with \textbf{Syllable Count} and the interaction of \textbf{Sequence duration}, \textbf{VC sequence}, and \textbf{Environment}. The direction of the effect of \textbf{Age Group} indicates that the child participants tended to coarticulate more with age, just as the adults studied coarticulated more than the children, likely because the older children and adults spoke faster.
 
 \begin{table}[tbp]
 
@@ -226,14 +230,17 @@ The final child model summary is listed in table \ref{tab:child-model-sum} and t
 \toprule
 term & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{S.E.} & \multicolumn{1}{c}{z.statistic} & \multicolumn{1}{c}{p.value} & \multicolumn{1}{c}{95\% CI}\\
 \midrule
-Intercept & 213.56 & 5.50 & 38.84 & 0.00 & 2.24,2.03\\
-Sequence duration & 0.33 & 0.06 & 5.52 & 0.00 & 0,0\\
-Environment:across morpheme & -7.56 & 6.89 & -1.10 & 0.27 & 0.06,-0.21\\
-VC sequence:ap & 61.78 & 5.73 & 10.78 & 0.00 & 0.73,0.51\\
-Sequence duration*Environment:across morpheme & -0.22 & 0.08 & -2.88 & 0.00 & 0,0\\
-Sequence duration*VC sequence:ap & -0.21 & 0.07 & -2.95 & 0.00 & 0,0\\
-Environment:across morpheme*VC sequence:ap & 6.80 & 8.05 & 0.84 & 0.40 & 0.23,-0.09\\
-Sequence duration*Environment:across morpheme*VC sequence:ap & 0.29 & 0.09 & 3.20 & 0.00 & 0,0\\
+Intercept & 203.64 & 5.33 & 38.20 & 0.00 & 2.14,1.93\\
+Syllable count:2 & 10.45 & 4.42 & 2.36 & 0.02 & 0.19,0.02\\
+Syllable count:3 & -4.32 & 1.75 & -2.47 & 0.01 & -0.01,-0.08\\
+Syllable count:4 & 6.27 & 2.80 & 2.24 & 0.03 & 0.12,0.01\\
+Sequence duration & 0.36 & 0.06 & 6.45 & 0.00 & 0,0\\
+Environment:across morpheme & 6.97 & 7.21 & 0.97 & 0.33 & 0.21,-0.07\\
+VC sequence:ap & 60.66 & 6.32 & 9.59 & 0.00 & 0.73,0.48\\
+Sequence duration*Environment:across morpheme & -0.17 & 0.08 & -2.18 & 0.03 & 0,0\\
+Sequence duration*VC sequence:ap & -0.22 & 0.07 & -3.26 & 0.00 & 0,0\\
+Environment:across morpheme*VC sequence:ap & 8.66 & 7.74 & 1.12 & 0.26 & 0.24,-0.07\\
+Sequence duration*Environment:across morpheme*VC sequence:ap & 0.25 & 0.09 & 2.72 & 0.01 & 0,0\\
 \bottomrule
 \end{tabular}
 
@@ -253,14 +260,22 @@ Sequence duration*Environment:across morpheme*VC sequence:ap & 0.29 & 0.09 & 3.2
 \toprule
 term & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{S.E.} & \multicolumn{1}{c}{z.statistic} & \multicolumn{1}{c}{p.value} & \multicolumn{1}{c}{95\% CI}\\
 \midrule
-Intercept & 216.80 & 3.70 & 58.66 & 0.00 & 2.24,2.1\\
-Sequence duration & 0.06 & 0.02 & 3.15 & 0.00 & 0,0\\
-Environment:across morpheme & -0.94 & 3.33 & -0.28 & 0.78 & 0.06,-0.07\\
-VC sequence:ap & 72.39 & 4.44 & 16.32 & 0.00 & 0.81,0.64\\
-Sequence duration*Environment:across morpheme & 0.07 & 0.03 & 2.38 & 0.02 & 0,0\\
-Sequence duration*VC sequence:ap & -0.01 & 0.03 & -0.32 & 0.75 & 0,0\\
-Environment:across morpheme*VC sequence:ap & -6.06 & 5.08 & -1.19 & 0.23 & 0.04,-0.16\\
-Sequence duration*Environment:across morpheme*VC sequence:ap & -0.09 & 0.04 & -2.40 & 0.02 & 0,0\\
+Intercept & 212.26 & 1.75 & 121.63 & 0.00 & 2.16,2.09\\
+Syllable count:2 & 5.77 & 2.40 & 2.40 & 0.02 & 0.1,0.01\\
+Syllable count:3 & -1.52 & 1.18 & -1.28 & 0.20 & 0.01,-0.04\\
+Syllable count:4 & -1.07 & 1.58 & -0.68 & 0.50 & 0.02,-0.04\\
+Sequence duration & 0.09 & 0.02 & 4.15 & 0.00 & 0,0\\
+Environment:across morpheme & 2.94 & 2.77 & 1.06 & 0.29 & 0.08,-0.02\\
+VC sequence:ap & 71.30 & 3.33 & 21.39 & 0.00 & 0.78,0.65\\
+Age:10 & -9.24 & 1.75 & -5.29 & 0.00 & -0.06,-0.13\\
+Age:6 & 3.00 & 1.20 & 2.49 & 0.01 & 0.05,0.01\\
+Age:7 & 0.57 & 1.03 & 0.56 & 0.58 & 0.03,-0.01\\
+Age:8 & 9.99 & 1.38 & 7.24 & 0.00 & 0.13,0.07\\
+Age:9 & -10.39 & 1.80 & -5.79 & 0.00 & -0.07,-0.14\\
+Sequence duration*Environment:across morpheme & 0.00 & 0.03 & -0.09 & 0.93 & 0,0\\
+Sequence duration*VC sequence:ap & -0.04 & 0.03 & -1.38 & 0.17 & 0,0\\
+Environment:across morpheme*VC sequence:ap & -1.67 & 3.67 & -0.45 & 0.65 & 0.06,-0.09\\
+Sequence duration*Environment:across morpheme*VC sequence:ap & -0.10 & 0.04 & -2.34 & 0.02 & 0,0\\
 \bottomrule
 \end{tabular}
 
@@ -269,9 +284,11 @@ Sequence duration*Environment:across morpheme*VC sequence:ap & -0.09 & 0.04 & -2
 
 \end{table}
 
-In the adult and child models, a positive coefficient for the predictor \textbf{VC sequence}, with the reference level `{[}ap{]}', shows that there was greater spectral distance between the segments in {[}ap{]} than {[}am{]}, as we would anticipate given the acoustic signatures of {[}m{]} (voiced, sonorant) versus {[}p{]} (voiceless, transient) (adult model: \(\beta\)=61.78, z=10.78, p\textless.001; child model: \(\beta\)=72.39, z=16.32, p\textless.001).
+In the adult and child models, a positive coefficient for the predictor \textbf{VC sequence}, with the reference level `{[}am{]}', shows that there was greater spectral distance between the segments in {[}ap{]} than {[}am{]}, as we would anticipate given the acoustic signatures of {[}m{]} (voiced, sonorant) versus {[}p{]} (voiceless, transient) (adult model: \(\beta\)=60.66, z=9.59, p\textless.001; child model: \(\beta\)=71.3, z=21.39, p\textless.001).
 
-Also of note in both the adult and child models is the direction of the \textbf{Sequence duration} predictor: a positive coefficient for \textbf{Sequence duration} indicates that longer duration VC sequences tended to also be less coarticulated (greater spectral distance between phones) (child model: \(\beta\)=0.06, z=3.15, p=0.002; adult model: \(\beta\)=0.33, z=5.52, p\textless.001). The coefficients suggest that when speakers, both adults and children alike, speak slower, they tend to coarticulate less. There is, however, an interaction between several of these predictors, which will demonstrate that children in particular do not always coarticulate less in longer-duration sequences. The direction of the interaction between \textbf{Sequence duration}, \textbf{VC sequence}, and \textbf{Environment} differs between the adult and child speakers so this will be interpreted separately for the two groups in the following section.
+A positive coefficient for \textbf{Sequence duration} indicates that longer duration VC sequences tend to be less coarticulated (greater spectral distance between phones) (child model: \(\beta\)=0.09, z=4.15, p\textless.001; adult model: \(\beta\)=0.36, z=6.45, p\textless.001). The coefficients suggest that when speakers, both adults and children alike, speak slower, they tend to coarticulate less. There is, however, an interaction between several of these predictors, which will demonstrate that children in particular do not always coarticulate less in longer-duration sequences. The direction of the interaction between \textbf{Sequence duration}, \textbf{VC sequence}, and \textbf{Environment} differs between the adult and child speakers so this will be interpreted separately for the two groups in the following section.
+
+Finally, the parameter \textbf{Syllable Count} was significant for the adult and child models, though the effect differed by group. Children tended to coarticulate progressively more in longer words. Adults coarticulated differently by word size, but coarticulation did not increase in longer words. These unanticipated age differences will be explored in the following section of the results.
 
 ~
 ~
@@ -289,18 +306,18 @@ Also of note in both the adult and child models is the direction of the \textbf{
 \end{figure}
 
 \hypertarget{adults}{%
-\subsubsection{Adults}\label{adults}}
+\paragraph{Adults}\label{adults}}
 
-For the adult model, the interaction between \textbf{Sequence duration}, \textbf{VC sequence}, and \textbf{Environment} suggests a difference in the relationship between the response variable - amount of coarticulation - and \textbf{Sequence duration} that differs by \textbf{Environment} and \textbf{VC sequence}. As Figure \ref{fig:adult-int-plot} demonstrates, this difference by \textbf{Environment} is apparent in the steepness of the slope for the `across morpheme' and `within morpheme' conditions for {[}am{]} and {[}ap{]}. To quantify this difference for the sequence {[}am{]}, the slopes of the two conditions were calculated. As the {[}am{]} panel in Figure \ref{fig:adult-int-plot} suggests, the slope for the `within morpheme' condition was steeper (2.14) than the slope for the `across morpheme' condition (2.06),\footnote{To reflect the data visualizations, these slopes were calculated on the beta coefficients before the coefficients were scaled by 100.} suggesting a different relationship between duration and coarticulation between the two word environments in adults.
+For the adult model, the interaction between \textbf{Sequence duration}, \textbf{VC sequence}, and \textbf{Environment} suggests a difference in the relationship between the response variable---amount of coarticulation---and \textbf{Sequence duration} that differs by \textbf{Environment} and \textbf{VC sequence}. As Figure \ref{fig:adult-int-plot} demonstrates, this difference by \textbf{Environment} is apparent in the steepness of the slope for the `across morpheme' and `within morpheme' conditions for {[}am{]} and {[}ap{]}. To quantify this difference for the sequence {[}am{]}, the slopes of the two conditions were calculated. As the {[}am{]} panel in Figure \ref{fig:adult-int-plot} suggests, the slope for the `within morpheme' condition was steeper (2.14) than the slope for the `across morpheme' condition (2.06),\footnote{To reflect the data visualizations, these slopes were calculated on the beta coefficients before the coefficients were scaled by 100.} suggesting a different relationship between duration and coarticulation between the two word environments in adults.
 
 Overall, the significance of the interaction \textbf{Sequence duration}, \textbf{VC sequence}, and \textbf{Environment} in adult speakers shows two important results: first, adults distinguish by word environment, both for {[}ap{]} versus {[}a\#p{]} sequences and {[}am{]} versus {[}a\#m{]} sequences. Second, complicating this finding, is the fact that adults distinguish between word environments differently depending upon the VC sequence. For {[}ap{]}, though adults coarticulate roughly equally across and within morphemes, the relationship between duration and coarticulation (longer duration equates to less coarticulation) is stronger in the `across morpheme' condition. For {[}am{]}, adults also distinguish between the two morphological environments by the relationship of VC duration and coarticulatory degree, but the effect of condition is reversed: the relationship between duration and coarticulation is stronger for the `within morpheme' condition.
 
-Thus, returning to one part of the central research question - does adult coarticulation differ by word environment - we find that adults do coarticulate differently in the two word environments. However, despite these significant differences, there was nevertheless a positive relationship between duration and amount of coarticulation for all combinations of VC sequences and word environments. Adults consistently coarticulate less in longer-duration sequences. This result suggests that adult speakers may have one overarching articulatory plan for all environments and both VC sequences measured. The following section demonstrates how this relationship between duration and coarticulation may not be uniform between adults and children.
+Thus, returning to one of the central research questions - does adult coarticulation differ by word environment - we find that adults do coarticulate differently in the two word environments. Despite the differences by word environment, there was still a positive relationship between duration and amount of coarticulation for all combinations of VC sequences and word environments. Adults consistently coarticulate less in longer-duration sequences. This result suggests that adult speakers may have one overarching articulatory plan for all environments and both VC sequences measured. The following section demonstrates how this relationship between duration and coarticulation may not be uniform between adults and children.
 
 \hypertarget{children}{%
-\subsubsection{Children}\label{children}}
+\paragraph{Children}\label{children}}
 
-Turning to the child model, the significant interaction of \textbf{Sequence duration}, \textbf{VC sequence}, and \textbf{Environment} suggests that children do not coarticulate similarly in longer-duration sequences for all combinations of \textbf{Environment} and \textbf{VC sequence} (Figure \ref{fig:child-int-plot}). Specifically, for {[}ap{]} sequences that occur across morpheme boundaries, the negative slope indicates that children actually coarticulate \emph{more} in longer duration sequences. The positive slope for the within morpheme boundary condition suggests that children coarticulate less in longer-duration sequences, in line with all of the adult patterns. So, children coarticulate more between segments at morpheme boundaries in words inflected with the locative marker \emph{-pi} than between those same segments that occur within morphemes.
+In the child model, the significant interaction of \textbf{Sequence duration}, \textbf{VC sequence}, and \textbf{Environment} suggests that children do not coarticulate similarly in longer-duration sequences for all combinations of \textbf{Environment} and \textbf{VC sequence} (Figure \ref{fig:child-int-plot}). Specifically, for {[}ap{]} sequences that occur across morpheme boundaries, the negative slope indicates that children actually coarticulate \emph{more} in longer duration sequences. The positive slope for the within morpheme boundary condition suggests that children coarticulate less in longer-duration sequences, in line with all of the adult patterns. So, children coarticulate more between segments at morpheme boundaries in words inflected with the locative marker \emph{-pi} than between those same segments that occur within morphemes.
 
 \begin{figure}
 \centering
@@ -308,7 +325,7 @@ Turning to the child model, the significant interaction of \textbf{Sequence dura
 \caption{\label{fig:child-facet-ap}Coarticulation within {[}ap{]} by sequence duration, morphological environment, and age in child speakers}
 \end{figure}
 
-Note that this negative relationship between duration and coarticulation is counter to the positive relationship for every combination of VC sequence and word environment in adult speakers. Adults consistently coarticulate less in longer-duration sequences regardless of environment or VC sequence. The facet plot in Figure \ref{fig:child-facet-ap} plots this relationship between duration and coarticulation for {[}ap{]} for each age group (5-10 years) to ensure a consistent pattern across the groups. (Again the predictor \textbf{Age Group}, with the levels 5, 6, 7, 8, 9, and 10 years, did not improve upon the child model fit.) All age groups show the same negative relationship: the longer the {[}ap{]} sequence, the more the children coarticulate between {[}a{]} and {[}p{]} in the across morpheme condition.
+This negative relationship between duration and spectral distance is counter to the positive relationship for every combination of VC sequence and word environment in adult speakers. Adults consistently coarticulate less in longer-duration sequences regardless of environment or VC sequence. The facet plot in Figure \ref{fig:child-facet-ap} plots this relationship between duration and coarticulation for {[}ap{]} for each age group (5-10 years) to ensure a consistent pattern. All age groups show the same negative relationship: the longer the {[}ap{]} sequence, the more the children coarticulate between {[}a{]} and {[}p{]} in the across morpheme condition.
 
 \begin{figure}
 \centering
@@ -316,36 +333,173 @@ Note that this negative relationship between duration and coarticulation is coun
 \caption{\label{fig:child-facet-am}Coarticulation within {[}am{]} by sequence duration, morphological environment, and age in child speakers}
 \end{figure}
 
-The results for {[}am{]} in children demonstrate broadly similar results to the adult speakers: children coarticulate less between segments in longer-duration {[}am{]} sequences. The facet plot in Figure \ref{fig:child-facet-am} once again shows a similar effect for each age group. Given the between-subject variability that typically characterizes child speech, these patterns by environment are further broken apart by individual child for each age group (age 5-10) (Appendix B) to ensure no large outliers with regards to the patterning by word environment. The results by are broadly similar across speakers.
+The results for {[}am{]} in children demonstrate broadly similar results to the adult speakers: children coarticulate less between segments in longer-duration {[}am{]} sequences. The facet plot in Figure \ref{fig:child-facet-am} once again shows a similar effect for each age group. Given the between-subject variability that typically characterizes child speech, these patterns by environment are further broken apart by individual child for each age group (age 5-10) (Appendix I) to ensure no large outliers with regards to the patterning by word environment. The results by are broadly similar across speakers.
+
+In sum, modeling results suggest that morphological structure is reflected in the speech of adults and children. However, the structure manifests in different ways between the two groups. Adults have a single plan for both environments, and even both VC sequences: adults coarticulate less in longer-duration sequences. For the most part, children show a similar duration-coarticulation relationship. The stark difference between adults and children emerges in the {[}ap{]} sequence patterning. Children differentiate between morphological environments via the relationship between duration and coarticulation as they coarticulate more in longer-duration sequences across morpheme boundaries and coarticulate \emph{less} in longer-duration sequences within morphemes. For words inflected with \emph{-man}, children show a similar pattern to adults, though children do not differentiate by environment coarticulatorily. Rather, across morpheme sequences are shorter in duration than within morpheme sequences for the children.
 
 ~
 ~
-
-\hypertarget{interim-discussion}{%
-\subsection{Interim discussion}\label{interim-discussion}}
-
-Comparing between the adult and child models, several preliminary conclusions can be made. First, responding to the original research question - do adults and children coarticulate differently within versus between morpheme boundaries - we find that both adults and children differentiate by morphological environment. However, they do so in different ways. Adults have a single plan for both environments, and even both VC sequences: adults coarticulate less in longer-duration sequences, and overall, they coarticulate less between {[}a{]} and {[}p{]} within morphemes than across morpheme boundaries. The stark difference between adults and children emerges in the {[}ap{]} sequence patterning. Children differentiate between morphological environments via the relationship between duration and coarticulation as they coarticulate more in longer-duration sequences across morpheme boundaries and coarticulate \emph{less} in longer-duration sequences within morphemes.
-
-For words inflected with \emph{-man}, children show a similar pattern to adults, though children do not differentiate by environment coarticulatorily. Rather, across morpheme sequences are shorter in duration than within morpheme sequences for the children. On the basis of these results, two questions remain. First, why do children differentiate between environments via a combination of duration and coarticulation; specifically, why do children produce shorter duration VC sequences across morpheme boundaries and longer duration sequences within morphemes? Second, why do children coarticulate more in longer-duration {[}ap{]} sequences that cross morpheme boundaries (e.g.~\emph{llama-pi} `llama-\textsc{loc}')? All of the other combinations of morphological environment and VC sequence in the adults and children suggest that the speakers coarticulate less in longer-duration segments.
-
-The finding that children produce shorter-duration VC sequences in the `across morpheme' condition than the `within morpheme' condition for {[}am{]} and {[}ap{]} could be explained by a confound in word size and morphological environment. Coarticulation for the `across morpheme' condition was, necessarily, measured across morphemes. However, to derive an across morpheme environment in Quechua, nouns are inflected with suffixes (e.g.~\emph{llama} `llama' -\textgreater{} \emph{llama-pi} `llama-\textsc{loc}'). As a result, almost all of the stimuli in the `across morpheme' condition are at least one syllable longer in length than the stimuli for the `within morpheme' condition. For example, coarticulation between {[}ap{]} was frequently measured within two syllable base roots (e.g.~\emph{llapa} `lightening' and \emph{llama} `llama'). However, for the `across morpheme' condition, {[}ap{]} coarticulation was frequently measured in three-syllable inflections of these nouns (e.g.~\emph{llapa-pi} `lightening-LOC' and \emph{llama-pi} `llama-\textsc{loc}'). Even for prosodically longer words where within morpheme coarticulation was measured, such as the three-syllable \emph{hampiri} `healer' and \emph{hatun mama} `grandmother', there were equivalent across morpheme stimuli that were one syllable longer (e.g.~\emph{hatun mama-mang} `grandmother-\textsc{all}').
 
 \hypertarget{compensatory-shortening}{%
 \subsection{Compensatory shortening}\label{compensatory-shortening}}
 
-To explore the possibility that durational differences between the `across morpheme' and `within morpheme' conditions could be due to word length, an exploratory analysis was conducted. We anticipated that sequence duration would shorten in words with more syllables, regardless of morphological context. This well-known tendency for segment durations to shorten in longer-duration/polysyllabic words is known as \textsc{Compensatory Shortening} (Harrington et al., 2015; Lehiste 1972; Munhall et al., 1992). To illustrate how this unfolds in the children's speech production for the current study, Figure \ref{fig:compshort-kids} plots VC sequence duration by the number of syllables for the children and Figure \ref{fig:compshort-adults} plots duration as a function of number of syllables for the adults. As the children's figure demonstrates, children's VC sequences are consistently shorter in words with more syllables, most notably between two- and three-syllable words. The same pattern is not apparent in the adult data: adults have fairly similar sequence lengths regardless of the number of syllables in the word (see Table \ref{tab:dur-by-syll-kids} for descriptive statistics of duration by word length in syllables for the children and Table \ref{tab:dur-by-syll-adults} for duration by word length results for the adults).
+One finding that emerged from the modeling in the previous section was a different effect of word length on coarticulation between the adults and children. The degree of children's coarticulation tended to progressively increase in words with more syllables; no such pattern was apparent for the adults.
 
-\begin{figure}
-\centering
-\includegraphics{3_ch3_results_files/figure-latex/compshort-kids-1.pdf}
-\caption{\label{fig:compshort-kids}Sequence duration by word length and word environment: Children}
-\end{figure}
+An exploratory analysis was conducted to explain the different relationship between coarticulation and word length for adults and children. This analysis asks, does the direction of the relationship between word length and coarticulation also hold for duration? Since coarticulation and duration are negatively correlated, this analysis predicts that duration would decrease as a function of the number of syllables in a word for the children. As such, the children's productions would reflect the phenomenon of \textsc{Compensatory Shortening} (also known as polysyllabic shortening), or the tendency for segment durations to shorten in longer-duration and/or polysyllabic words (Harrington et al., 2015; Lehiste 1972; Munhall et al., 1992).
+
+An effect of word length upon duration was predicted for the adults as well. However, just as it was found that coarticulation did not increase as a function of word length in the adult model, it is anticipated that adults likewise will not compensate durationally for longer words. As a result, the children, but not the adults, would exhibit compensatory shortening during their word production.
 
 \begin{figure}
 \centering
 \includegraphics{3_ch3_results_files/figure-latex/compshort-adults-1.pdf}
 \caption{\label{fig:compshort-adults}Sequence duration by word length and word environment: Adults}
 \end{figure}
+
+\begin{table}[!htbp] \centering 
+  \caption{Model predicting VC duration: children} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ Intercept & 230.96$^{***}$ \\ 
+  & (228.03, 233.88) \\ 
+  & \\ 
+ Age:6 & 8.66$^{***}$ \\ 
+  & (4.74, 12.58) \\ 
+  & \\ 
+ Age:7 & 3.78$^{*}$ \\ 
+  & (0.43, 7.12) \\ 
+  & \\ 
+ Age:8 & 0.25 \\ 
+  & ($-$4.26, 4.76) \\ 
+  & \\ 
+ Age:9 & $-$14.46$^{***}$ \\ 
+  & ($-$20.31, $-$8.61) \\ 
+  & \\ 
+ Age:10 & $-$17.23$^{***}$ \\ 
+  & ($-$22.92, $-$11.54) \\ 
+  & \\ 
+ VC sequence:[ap] & 28.31$^{***}$ \\ 
+  & (24.38, 32.23) \\ 
+  & \\ 
+ Two syllables & 57.70$^{***}$ \\ 
+  & (54.37, 61.03) \\ 
+  & \\ 
+ Three syllables & $-$21.63$^{***}$ \\ 
+  & ($-$23.54, $-$19.72) \\ 
+  & \\ 
+ Four syllables & $-$33.27$^{***}$ \\ 
+  & ($-$37.97, $-$28.56) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 3,877 \\ 
+Log Likelihood & $-$20,476.84 \\ 
+Akaike Inf. Crit. & 40,977.68 \\ 
+Bayesian Inf. Crit. & 41,052.84 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001} \\ 
+\end{tabular} 
+\end{table}
+
+\begin{table}[!htbp] \centering 
+  \caption{Model predicting VC duration: adults} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ Intercept & 174.41$^{***}$ \\ 
+  & (169.18, 179.63) \\ 
+  & \\ 
+ VC sequence:[ap] & 29.66$^{***}$ \\ 
+  & (22.49, 36.83) \\ 
+  & \\ 
+ Two syllables & $-$6.12 \\ 
+  & ($-$13.46, 1.23) \\ 
+  & \\ 
+ Three syllables & 4.24$^{*}$ \\ 
+  & (0.78, 7.70) \\ 
+  & \\ 
+ Four syllables & $-$5.36 \\ 
+  & ($-$12.97, 2.25) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 1,200 \\ 
+Log Likelihood & $-$6,133.52 \\ 
+Akaike Inf. Crit. & 12,281.04 \\ 
+Bayesian Inf. Crit. & 12,316.67 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001} \\ 
+\end{tabular} 
+\end{table}
+
+To test the effect of word length (in syllables) upon duration, two linear mixed effects models (adult and child) were fit to predict VC sequence duration (no skewed or non-negative predictors were included in the modeling so GLMMs were not necessary). Model fitting occurred as before in a forward-testing manner: the base model contained random slopes of individual \textbf{Speaker} by \textbf{Word}. Then, parameters were added in the following order: \textbf{Age Group} (fit with weighted effect coding; only included in the child model), \textbf{VC sequence}, \textbf{Number of Syllables} (2-5), and \textbf{Environment} (across versus within). Only the predictors \textbf{Number of Syllables}, \textbf{Age Group}, and \textbf{VC sequence} improved baseline model fit (see Table XXX for the child model summary and Table XXX for the adult model summary; see Appendices G and H for tables with descriptive statistics of duration by age and number of syllables).
+
+In both model summaries, the positive beta coefficients for VC sequence indicate that the {[}ap{]} sequence was significantly longer than the {[}am{]} sequence (as previous models demonstrated). The insignificance of \textbf{Environment} suggests that that the relationship between duration and word length is independent of word environment. The patterns by child age again demonstrate how older children speak faster than younger. Negative coefficients for the nine- and ten-year old children indicate that those children's VC sequences were approximately 14 ms and 17 ms shorter, respectively, than the weighted age group mean.
+
+The primary parameter of interest is \textbf{Syllable Count}. In the child model, the positive coefficient for `2 syllable' stimuli indicates that VC sequence duration in two syllable words was approximately 58 ms longer than the weighted mean word length. The negative coefficients for the `3 syllable' (\(\beta\)=-21.63), `4 syllable' (\(\beta\)=-33.27) and `5 syllable' (\(\beta\)=-28.62; not presented in model summary) stimuli indicate that VC sequences tend to become shorter in longer words. The diverse stimuli in the two- and three-syllable conditions in particular (many different word types) suggest that this relationship by word length is relatively robust for the children.\footnote{The only exception to the tendency to shorten sequences in larger words was that {[}ap{]} sequences are slightly longer in duration in 5-syllable words than 4-syllable words. However, in this exploratory analysis, the differences between the four and five syllable words were not tightly controlled: there were only two different five-syllable word stimuli: \emph{hatun mama-man} `grandmother-\textsc{all}'' and \emph{hatun mama-pi} `grandmother-\textsc{loc}'. We can only speculate that this relationship between sequence duration and number of syllables is strictly linear and would generalize to additional words with more syllables for the children.}
+
+For the adult model, a model with \textbf{Syllable Count} only marginally improved over one without (\(\chi\)\textsuperscript{2} = 6.72, df=4,7, p=.08). Furthermore, only one level of \textbf{Syllable Count}, the three syllable stimuli, significantly predicted sequence duration. This result suggests that 1) word length was not strongly predictive of sequence duration in the adults and 2) adults did not compensate for word length by shortening syllable durations in longer words.
+
+In sum, children appear to compensate for word length in their speech production via coarticulation and duration. Word length is also reflected in the adults' speech patterns, but not in any linear direction that suggests compensatory shortening. Causes behind these age differences are proposed in the Discussion.
+
+\hypertarget{appendices}{%
+\section{Appendices}\label{appendices}}
+
+\hypertarget{appendix-e}{%
+\subsection{Appendix E}\label{appendix-e}}
+
+\begin{table}[tbp]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:adult-child model sum}Model predicting coarticulation in children 
+ and adults}
+
+\begin{tabular}{llllll}
+\toprule
+term & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{S.E.} & \multicolumn{1}{c}{z.statistic} & \multicolumn{1}{c}{p.value} & \multicolumn{1}{c}{95\% CI}\\
+\midrule
+Intercept & 204.61 & 4.67 & 43.86 & 0.00 & 2.14,1.95\\
+Syllable count:2 & 9.48 & 2.05 & 4.62 & 0.00 & 0.13,0.05\\
+Syllable count:3 & -3.31 & 0.95 & -3.47 & 0.00 & -0.01,-0.05\\
+Syllable count:4 & -1.12 & 1.36 & -0.82 & 0.41 & 0.02,-0.04\\
+Sequence duration & 0.29 & 0.06 & 4.99 & 0.00 & 0,0\\
+VC sequence:ap & 61.68 & 5.31 & 11.62 & 0.00 & 0.72,0.51\\
+Age:child & 6.07 & 4.75 & 1.28 & 0.20 & 0.15,-0.03\\
+Environment:across morpheme & 5.73 & 6.35 & 0.90 & 0.37 & 0.18,-0.07\\
+Sequence duration*VC sequence:ap & -0.15 & 0.07 & -2.18 & 0.03 & 0,0\\
+Sequence duration*Age:child & -0.21 & 0.06 & -3.39 & 0.00 & 0,0\\
+VC sequence:ap*Age:child & 6.83 & 6.10 & 1.12 & 0.26 & 0.19,-0.05\\
+Sequence duration*Environment:across morpheme & -0.11 & 0.08 & -1.31 & 0.19 & 0,0\\
+VC sequence:ap*Environment:across morpheme & 9.12 & 6.95 & 1.31 & 0.19 & 0.23,-0.05\\
+Age:child*Environment:across morpheme & 0.42 & 6.30 & 0.07 & 0.95 & 0.13,-0.12\\
+Sequence duration*VC sequence:ap*Age:child & 0.13 & 0.08 & 1.68 & 0.09 & 0,0\\
+Sequence duration*VC sequence:ap*Environment:across morpheme & 0.16 & 0.09 & 1.69 & 0.09 & 0,0\\
+Sequence duration*Age:child*Environment:across morpheme & 0.13 & 0.09 & 1.56 & 0.12 & 0,0\\
+VC sequence:ap*Age:child*Environment:across morpheme & -8.35 & 7.69 & -1.09 & 0.28 & 0.07,-0.23\\
+Sequence duration*VC sequence:ap*Age:child*Environment:across morpheme & -0.28 & 0.10 & -2.75 & 0.01 & 0,0\\
+\bottomrule
+\end{tabular}
+
+\end{threeparttable}
+\end{center}
+
+\end{table}
+
+\hypertarget{appendix-f}{%
+\subsection{Appendix F}\label{appendix-f}}
+
+\begin{figure}
+\centering
+\includegraphics{3_ch3_results_files/figure-latex/child-facet-ap-word-1.pdf}
+\caption{\label{fig:child-facet-ap-word}Coarticulation within {[}ap{]} by sequence duration, morphological environment, and word in child speakers}
+\end{figure}
+
+\hypertarget{appendix-g}{%
+\subsection{Appendix G}\label{appendix-g}}
 
 \begin{table}
 
@@ -365,6 +519,9 @@ Syllables & Duration (ms) & SD  & Duration (ms) & SD\\
 \end{tabular}
 \end{table}
 
+\hypertarget{appendix-h}{%
+\subsection{Appendix H}\label{appendix-h}}
+
 \begin{table}
 
 \caption{\label{tab:dur-by-syll-adults}Mean VC sequence duration by number of syllables in word for adults}
@@ -383,86 +540,8 @@ Syllables & Duration (ms) & SD  & Duration (ms) & SD\\
 \end{tabular}
 \end{table}
 
-\begin{table}[!htbp] \centering 
-  \caption{Model predicting VC duration: children} 
-  \label{} 
-\begin{tabular}{@{\extracolsep{5pt}}lc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
- Intercept & 289.36$^{***}$ \\ 
-  & (276.14, 302.58) \\ 
-  & \\ 
- Three syllables & $-$79.68$^{***}$ \\ 
-  & ($-$90.37, $-$68.99) \\ 
-  & \\ 
- Four syllables & $-$93.38$^{***}$ \\ 
-  & ($-$107.40, $-$79.37) \\ 
-  & \\ 
- Five syllables & $-$87.01$^{***}$ \\ 
-  & ($-$108.68, $-$65.34) \\ 
-  & \\ 
- VC sequence:[ap] & 27.66$^{***}$ \\ 
-  & (19.56, 35.77) \\ 
-  & \\ 
-\hline \\[-1.8ex] 
-Observations & 3,877 \\ 
-Log Likelihood & $-$20,122.98 \\ 
-Akaike Inf. Crit. & 40,261.97 \\ 
-Bayesian Inf. Crit. & 40,312.07 \\ 
-\hline 
-\hline \\[-1.8ex] 
-\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001} \\ 
-\end{tabular} 
-\end{table}
-
-To further explore the phenomenon of Compensatory Shortening in the children's speech, a linear mixed effects model was fit to predict the VC sequence duration in the children's speech (no skewed/non-negative predictors were included in the modelling so GLMMs were not necessary). Model fitting occurred as before in a forward-testing manner: the base model contained random effects of individual \textbf{Child} and \textbf{Word} (random slopes of Speaker by Word did not converge). Then, parameters were added in the following order: \textbf{Age} (5-10), \textbf{Number of Syllables} (2-5), \textbf{Environment} (across versus within), the interaction of \textbf{Number of Syllables} and \textbf{Environment}, and \textbf{VC sequence}. Only the predictors \textbf{Number of Syllables} and \textbf{VC sequence} improved baseline model fit (see Table \ref{tab:dursum} for model summary).
-
-In the model summary, the positive beta coefficient for VC sequence with a reference level {[}am{]} indicates that the {[}ap{]} sequence was significantly longer than {[}am{]} sequences (as previous models demonstrated). Next, the negative beta coefficients for \textbf{Syllable Count} with a reference level of `2 syllables' indicated that VC sequence duration was approximately 80 ms shorter in three syllable words than two syllable (\(\beta\)=-79.68, t=-14.61, p\textless.001). Similarly, VC sequences were approximately 93 ms shorter in four syllable words than two syllable (\(\beta\)=-93.38, t=-13.06, p\textless.001) and 87 ms shorter in five syllable words than two syllable words (\(\beta\)=-87.01, t=-7.87, p\textless.001). The insignificance of \textbf{Environment} and child \textbf{Age} for the modelling suggests that that this relationship between duration and word length is independent of morphological environment and child age.
-
-As these coefficients demonstrate, VC sequence decreases in larger words, with the largest differences between two- and three-syllable words. The diverse stimuli in the two- and three-syllable conditions (many different word types) suggest that this relationship by word length is relatively robust.
-
-The only exception to the tendency to shorten sequences in larger words was that {[}ap{]} sequences are slightly longer in duration in 5-syllable words than 4-syllable words. However, in this exploratory analysis, the differences between the four and five syllable words were not tightly controlled: there were only two different five-syllable word stimuli: \emph{hatun mama-man} `grandmother-\textsc{all}'' and \emph{hatun mama-pi} `grandmother-\textsc{loc}'. We can only speculate that this relationship between sequence duration and number of syllables is strictly linear and would generalize to additional words with more syllables.
-
-In conclusion, on the basis of this modeling, it is proposed that children may differentiate by morphological environment in their speech production. However, in Quechua, morphological structure is crossed with prosodic structure: complex words are always structurally longer than base forms. Regardless, children distinguish between morphological/prosodic environments primarily via the acoustic cue of \emph{duration}: in child Quechua, the duration of sequences is shorter in words with more syllables (Compensatory Shortening). This duration pattern by word length was not present in the adult speech, a finding that is explored in the Discussion.
-
-\hypertarget{appendices}{%
-\section{Appendices}\label{appendices}}
-
-\begin{table}[tbp]
-
-\begin{center}
-\begin{threeparttable}
-
-\caption{\label{tab:adult-child model sum}Model predicting coarticulation in children 
- and adults}
-
-\begin{tabular}{llllll}
-\toprule
-term & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{S.E.} & \multicolumn{1}{c}{z.statistic} & \multicolumn{1}{c}{p.value} & \multicolumn{1}{c}{95\% CI}\\
-\midrule
-Intercept & 2.02 & 0.07 & 30.50 & 0.00 & 2.15,1.89\\
-VC\_sequence:ap & 0.00 & 0.00 & 0.63 & 0.53 & 0,0\\
-Age:adult & 0.73 & 0.04 & 17.13 & 0.00 & 0.81,0.65\\
-Binary\_agechild & 0.14 & 0.07 & 2.04 & 0.04 & 0.27,0.01\\
-Environmentwithin morpheme & 0.07 & 0.05 & 1.34 & 0.18 & 0.18,-0.03\\
-Sequence\_duration*VC sequence:ap & 0.00 & 0.00 & 2.31 & 0.02 & 0,0\\
-Sequence\_duration\_scaled:Binary\_agechild & 0.00 & 0.00 & 1.99 & 0.05 & 0,0\\
-VC\_sequenceap:Binary\_agechild & -0.06 & 0.04 & -1.58 & 0.11 & 0.01,-0.13\\
-Sequence\_duration\_scaled:Environmentwithin morpheme & 0.00 & 0.00 & 2.58 & 0.01 & 0,0\\
-VC\_sequenceap:Environmentwithin morpheme & -0.09 & 0.06 & -1.50 & 0.13 & 0.03,-0.22\\
-Binary\_agechild:Environmentwithin morpheme & -0.09 & 0.05 & -1.74 & 0.08 & 0.01,-0.2\\
-Sequence\_duration\_scaled:VC\_sequenceap:Binary\_agechild & 0.00 & 0.00 & -3.79 & 0.00 & 0,0\\
-Sequence\_duration\_scaled:VC\_sequenceap:Environmentwithin morpheme & 0.00 & 0.00 & -2.71 & 0.01 & 0,0\\
-Sequence\_duration\_scaled:Binary\_agechild:Environmentwithin morpheme & 0.00 & 0.00 & -3.36 & 0.00 & 0,0\\
-VC\_sequenceap:Binary\_agechild:Environmentwithin morpheme & 0.16 & 0.07 & 2.31 & 0.02 & 0.29,0.02\\
-Sequence\_duration\_scaled:VC\_sequenceap:Binary\_agechild:Environmentwithin morpheme & 0.00 & 0.00 & 3.44 & 0.00 & 0,0\\
-\bottomrule
-\end{tabular}
-
-\end{threeparttable}
-\end{center}
-
-\end{table}
+\hypertarget{appendix-i}{%
+\subsection{Appendix I}\label{appendix-i}}
 
 \begin{figure}
 \centering
