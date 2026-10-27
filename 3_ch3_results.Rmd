@@ -30,11 +30,11 @@ library('glmmTMB')
 library('lme4')
 library('kableExtra')
 library('wec')
-devtools::install_github("crsh/papaja")
+# devtools::install_github("crsh/papaja") # install papaja once before knitting
 ```
 
 ```{r load data, include=FALSE}
-df.final <- read.csv('/Users/Meg/Box Sync/Dissertation/Experiment_2/analysis/2019/analysis_scripts/mapped_words_anonymized.csv')
+df.final <- read.csv('mapped_words_anonymized.csv')
 ```
 
 ```{r, make a VC_sequence variable, include=FALSE}
@@ -212,7 +212,7 @@ durskew <- normtest::skewness.norm.test(adult$Sequence_duration_scaled, nrepl=10
 ```{r, output data for ch 4, include=FALSE}
 df.final.output <- df.final %>%
   select(Speaker, Binary_age, Age, Phone, Previous, Following, Word, Phone_duration, Word_duration, Morph_status, euc_dist, aX_duration, VC_sequence, Environment)
-write.csv(df.final.output, file = "/Users/Meg/Box Sync/Dissertation/Experiment_3/results/morph_data.csv", row.names = FALSE)
+write.csv(df.final.output, file = "morph_data.csv", row.names = FALSE)
 ```
 
 ### Modeling 

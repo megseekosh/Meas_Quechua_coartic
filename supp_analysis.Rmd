@@ -28,11 +28,11 @@ library('stargazer')
 library('lme4')
 library('kableExtra')
 library('wec')
-devtools::install_github("crsh/papaja")
+# devtools::install_github("crsh/papaja") # install papaja once before knitting
 ```
 
 ```{r load data, include=FALSE}
-df.final <- read.csv('/Users/Meg/Box Sync/Dissertation/Experiment_2/analysis/2019/analysis_scripts/mapped_words_anonymized.csv')
+df.final <- read.csv('mapped_words_anonymized.csv')
 ```
 
 ```{r, make a VC_sequence variable, include=FALSE}
